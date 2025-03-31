@@ -10,6 +10,8 @@ public interface IError
     /// <summary>
     /// the error message
     /// </summary>
+    [JsonPropertyName("message")]
+    [JsonPropertyOrder(0)]
     public string Message { get; }
 }
 

@@ -8,7 +8,7 @@ namespace Rum.Schemas.Rules;
 public class Not(params IRule[] rules) : IRule
 {
     public string Name => "not";
-    public string Message => $"[{string.Join(", ", rules.Select(r => r.Name))}] should be false";
+    public string Message => $"[{string.Join(", ", rules.Select(r => r.Name))}] should be falsy";
 
     public IResult<object?> Resolve(object? value)
     {

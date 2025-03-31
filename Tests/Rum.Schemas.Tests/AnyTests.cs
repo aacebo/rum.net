@@ -73,4 +73,25 @@ public class AnyTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal("test", res.Value);
     }
+
+    [Fact]
+    public void Not_ShouldError()
+    {
+        var res = new Any().Not(new Int()).Validate(1);
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
+    public void Not_ShouldSucceed()
+    {
+        var res = new Any().Not(new Int()).Validate(1.2);
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.Message);
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal(1.2, res.Value);
+    }
 }

@@ -7,6 +7,8 @@ namespace Rum.Schemas;
 /// </summary>
 public class Int : Any<int?>, ISchema<int?>
 {
+    public override string Name => "int";
+
     public Int() : base()
     {
         Rule(new Rule("int", value =>
@@ -22,6 +24,7 @@ public class Int : Any<int?>, ISchema<int?>
     public override Int Required() => (Int)base.Required();
     public override Int Enum(params int?[] options) => (Int)base.Enum(options);
     public override Int Default(int? defaultValue) => (Int)base.Default(defaultValue);
+    public override Int Not(params IRule[] rules) => (Int)base.Not(rules);
 
     public Int Min(int min) => Rule(new Rules.Int.Min(min));
     public Int Max(int max) => Rule(new Rules.Int.Max(max));

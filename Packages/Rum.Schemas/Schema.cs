@@ -5,7 +5,7 @@ namespace Rum.Schemas;
 /// <summary>
 /// Any Schema
 /// </summary>
-public partial interface ISchema<T>
+public partial interface ISchema<T> : IRule
 {
     /// <summary>
     /// validate some input value

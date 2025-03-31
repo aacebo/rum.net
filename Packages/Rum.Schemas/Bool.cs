@@ -7,6 +7,8 @@ namespace Rum.Schemas;
 /// </summary>
 public class Bool : Any<bool?>, ISchema<bool?>
 {
+    public override string Name => "bool";
+
     public Bool() : base()
     {
         Rule(new Rule("bool", value =>
@@ -22,4 +24,5 @@ public class Bool : Any<bool?>, ISchema<bool?>
     public override Bool Required() => (Bool)base.Required();
     public override Bool Enum(params bool?[] options) => (Bool)base.Enum(options);
     public override Bool Default(bool? defaultValue) => (Bool)base.Default(defaultValue);
+    public override Bool Not(params IRule[] rules) => (Bool)base.Not(rules);
 }

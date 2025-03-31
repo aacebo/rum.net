@@ -241,4 +241,25 @@ public class IntTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal(19, res.Value);
     }
+
+    [Fact]
+    public void Not_ShouldError()
+    {
+        var res = new Int().Not(new Int().Even()).Validate(2);
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
+    public void Not_ShouldSucceed()
+    {
+        var res = new Int().Not(new Int().Even()).Validate(3);
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.Message);
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal(3, res.Value);
+    }
 }

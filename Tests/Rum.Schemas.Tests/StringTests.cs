@@ -264,4 +264,25 @@ public class StringTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal("http://localhost", res.Value);
     }
+
+    [Fact]
+    public void Not_ShouldError()
+    {
+        var res = new String().Not(new String().Enum("a", "b")).Validate("a");
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
+    public void Not_ShouldSucceed()
+    {
+        var res = new String().Not(new String().Enum("a", "b")).Validate("c");
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.Message);
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal("c", res.Value);
+    }
 }

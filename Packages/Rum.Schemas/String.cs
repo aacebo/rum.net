@@ -9,6 +9,8 @@ namespace Rum.Schemas;
 /// </summary>
 public class String : Any<string?>, ISchema<string?>
 {
+    public override string Name => "string";
+
     public String() : base()
     {
         Rule(new Rule("string", value =>
@@ -24,6 +26,7 @@ public class String : Any<string?>, ISchema<string?>
     public override String Required() => (String)base.Required();
     public override String Enum(params string?[] options) => (String)base.Enum(options);
     public override String Default(string? defaultValue) => (String)base.Default(defaultValue);
+    public override String Not(params IRule[] rules) => (String)base.Not(rules);
 
     public String Min(int min) => Rule(new Rules.String.Min(min));
     public String Max(int max) => Rule(new Rules.String.Max(max));

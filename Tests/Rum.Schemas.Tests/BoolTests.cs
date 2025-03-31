@@ -94,4 +94,25 @@ public class BoolTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal(false, res.Value);
     }
+
+    [Fact]
+    public void Not_ShouldError()
+    {
+        var res = new Bool().Not(new Bool().Enum(true)).Validate(true);
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
+    public void Not_ShouldSucceed()
+    {
+        var res = new Bool().Not(new Bool().Enum(true)).Validate(false);
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.Message);
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal(false, res.Value);
+    }
 }
