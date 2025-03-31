@@ -222,4 +222,46 @@ public class StringTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal("test@gmail.com", res.Value);
     }
+
+    [Fact]
+    public void Guid_ShouldError()
+    {
+        var res = new String().Guid().Validate("hi");
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
+    public void Guid_ShouldSucceed()
+    {
+        var res = new String().Guid().Validate("076db1e2-c222-4663-a195-b4c7a556e1fd");
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.ToString());
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal("076db1e2-c222-4663-a195-b4c7a556e1fd", res.Value);
+    }
+
+    [Fact]
+    public void Url_ShouldError()
+    {
+        var res = new String().Url().Validate("hi");
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
+    public void Url_ShouldSucceed()
+    {
+        var res = new String().Url().Validate("http://localhost");
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.ToString());
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal("http://localhost", res.Value);
+    }
 }

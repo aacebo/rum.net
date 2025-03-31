@@ -31,4 +31,6 @@ public class String : Any<string?>, ISchema<string?>
     public String Pattern(string pattern) => Rule(new Rules.String.Pattern(pattern));
     public String Pattern(Regex pattern) => Rule(new Rules.String.Pattern(pattern));
     public String Email() => Rule(new Rules.String.Email());
+    public String Guid() => Rule(new Rules.String.Guid());
+    public String Url() => Rule(new Rules.String.Url());
 }

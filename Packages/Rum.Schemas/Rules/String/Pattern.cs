@@ -4,6 +4,9 @@ using Rum.Core;
 
 namespace Rum.Schemas.Rules.String;
 
+/// <summary>
+/// Regex Pattern Matching
+/// </summary>
 public class Pattern : IRule
 {
     public string Name => "string.pattern";

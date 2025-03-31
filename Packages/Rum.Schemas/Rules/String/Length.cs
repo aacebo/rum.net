@@ -2,6 +2,9 @@ using Rum.Core;
 
 namespace Rum.Schemas.Rules.String;
 
+/// <summary>
+/// Exact Length
+/// </summary>
 public class Length(int length) : IRule
 {
     public string Name => "string.length";

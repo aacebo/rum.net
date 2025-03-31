@@ -2,6 +2,9 @@ using Rum.Core;
 
 namespace Rum.Schemas.Rules.String;
 
+/// <summary>
+/// Min Length
+/// </summary>
 public class Min(int min) : IRule
 {
     public string Name => "string.min";

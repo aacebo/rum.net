@@ -2,6 +2,9 @@ using Rum.Core;
 
 namespace Rum.Schemas.Rules.String;
 
+/// <summary>
+/// Max Length
+/// </summary>
 public class Max(int max) : IRule
 {
     public string Name => "string.max";

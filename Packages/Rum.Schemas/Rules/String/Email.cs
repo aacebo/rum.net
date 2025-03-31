@@ -2,6 +2,9 @@ using Rum.Core;
 
 namespace Rum.Schemas.Rules.String;
 
+/// <summary>
+/// Email String Format
+/// </summary>
 public class Email : IRule
 {
     public string Name => "string.email";
