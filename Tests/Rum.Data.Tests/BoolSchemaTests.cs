@@ -94,25 +94,4 @@ public class BoolSchemaTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal(false, res.Value);
     }
-
-    [Fact]
-    public void Not_ShouldError()
-    {
-        var res = Schemas.Bool().Not(Schemas.Bool().Enum(true)).Validate(true);
-        Assert.NotNull(res.Error);
-    }
-
-    [Fact]
-    public void Not_ShouldSucceed()
-    {
-        var res = Schemas.Bool().Not(Schemas.Bool().Enum(true)).Validate(false);
-
-        if (res.Error != null)
-        {
-            output.WriteLine(res.Error.GetError());
-        }
-
-        Assert.Null(res.Error);
-        Assert.Equal(false, res.Value);
-    }
 }

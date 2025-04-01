@@ -83,25 +83,4 @@ public class AnySchemaTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal("test", res.Value);
     }
-
-    [Fact]
-    public void Not_ShouldError()
-    {
-        var res = Schemas.Any().Not(Schemas.Int()).Validate(1);
-        Assert.NotNull(res.Error);
-    }
-
-    [Fact]
-    public void Not_ShouldSucceed()
-    {
-        var res = Schemas.Any().Not(Schemas.Int()).Validate(1.2);
-
-        if (res.Error != null)
-        {
-            output.WriteLine(res.Error.GetError());
-        }
-
-        Assert.Null(res.Error);
-        Assert.Equal(1.2, res.Value);
-    }
 }

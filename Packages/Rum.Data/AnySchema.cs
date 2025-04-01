@@ -57,11 +57,6 @@ public class AnySchema<T> : ISchema<T?>
         return Rule(new Rules.Default<T>(defaultValue));
     }
 
-    public virtual AnySchema<T> Not(params IRule[] rules)
-    {
-        return Rule(new Rules.Not(rules));
-    }
-
     public virtual IResult<T?> Validate(object? value)
     {
         var errors = new ErrorGroup(_message);

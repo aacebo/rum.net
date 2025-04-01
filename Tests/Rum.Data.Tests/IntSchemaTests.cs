@@ -241,25 +241,4 @@ public class IntSchemaTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal(19, res.Value);
     }
-
-    [Fact]
-    public void Not_ShouldError()
-    {
-        var res = Schemas.Int().Not(Schemas.Int().Even()).Validate(2);
-        Assert.NotNull(res.Error);
-    }
-
-    [Fact]
-    public void Not_ShouldSucceed()
-    {
-        var res = Schemas.Int().Not(Schemas.Int().Even()).Validate(3);
-
-        if (res.Error != null)
-        {
-            output.WriteLine(res.Error.GetError());
-        }
-
-        Assert.Null(res.Error);
-        Assert.Equal(3, res.Value);
-    }
 }

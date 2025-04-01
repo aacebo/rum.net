@@ -33,5 +33,4 @@ public class BoolSchema : AnySchema<bool?>, ISchema<bool?>
     public override BoolSchema Required() => (BoolSchema)base.Required();
     public override BoolSchema Enum(params bool?[] options) => (BoolSchema)base.Enum(options);
     public override BoolSchema Default(bool? defaultValue) => (BoolSchema)base.Default(defaultValue);
-    public override BoolSchema Not(params IRule[] rules) => (BoolSchema)base.Not(rules);
 }

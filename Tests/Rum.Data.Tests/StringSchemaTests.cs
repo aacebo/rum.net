@@ -264,25 +264,4 @@ public class StringSchemaTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal("http://localhost", res.Value);
     }
-
-    [Fact]
-    public void Not_ShouldError()
-    {
-        var res = Schemas.String().Not(Schemas.String().Enum("a", "b")).Validate("a");
-        Assert.NotNull(res.Error);
-    }
-
-    [Fact]
-    public void Not_ShouldSucceed()
-    {
-        var res = Schemas.String().Not(Schemas.String().Enum("a", "b")).Validate("c");
-
-        if (res.Error != null)
-        {
-            output.WriteLine(res.Error.GetError());
-        }
-
-        Assert.Null(res.Error);
-        Assert.Equal("c", res.Value);
-    }
 }

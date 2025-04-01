@@ -33,7 +33,6 @@ public class IntSchema : AnySchema<int?>, ISchema<int?>
     public override IntSchema Required() => (IntSchema)base.Required();
     public override IntSchema Enum(params int?[] options) => (IntSchema)base.Enum(options);
     public override IntSchema Default(int? defaultValue) => (IntSchema)base.Default(defaultValue);
-    public override IntSchema Not(params IRule[] rules) => (IntSchema)base.Not(rules);
 
     public IntSchema Min(int min) => Rule(new Rules.Int.Min(min));
     public IntSchema Max(int max) => Rule(new Rules.Int.Max(max));
@@ -41,5 +40,5 @@ public class IntSchema : AnySchema<int?>, ISchema<int?>
     public IntSchema Positive() => Rule(new Rules.Int.Min(0));
     public IntSchema Negative() => Rule(new Rules.Int.Max(-1));
     public IntSchema Even() => Rule(new Rules.Int.Even());
-    public IntSchema Odd() => Rule(new Rules.Not(new Rules.Int.Even()));
+    public IntSchema Odd() => Rule(new Rules.Int.Odd());
 }
