@@ -35,6 +35,7 @@ public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
         }));
     }
 
+    public override ArraySchema<T> Message(string message) => (ArraySchema<T>)base.Message(message);
     public override ArraySchema<T> Rule(IRule rule) => (ArraySchema<T>)base.Rule(rule);
     public override ArraySchema<T> Rule(string name, Rule.ResolverFn resolve) => (ArraySchema<T>)base.Rule(name, resolve);
     public override ArraySchema<T> Required() => (ArraySchema<T>)base.Required();
@@ -52,7 +53,7 @@ public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
             return res;
         }
 
-        var errors = new ErrorGroup();
+        var errors = new ErrorGroup(_message);
         var list = res.Value ?? [];
 
         for (var i = 0; i < list.Length; i++)

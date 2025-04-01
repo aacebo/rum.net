@@ -28,7 +28,7 @@ public class StringSchema : AnySchema<string?>, ISchema<string?>
             return Result<object?>.Err("must be a string");
         }));
     }
-
+    public override StringSchema Message(string message) => (StringSchema)base.Message(message);
     public override StringSchema Rule(IRule rule) => (StringSchema)base.Rule(rule);
     public override StringSchema Rule(string name, Rule.ResolverFn resolve) => (StringSchema)base.Rule(name, resolve);
     public override StringSchema Required() => (StringSchema)base.Required();

@@ -27,6 +27,7 @@ public class IntSchema : AnySchema<int?>, ISchema<int?>
         }));
     }
 
+    public override IntSchema Message(string message) => (IntSchema)base.Message(message);
     public override IntSchema Rule(IRule rule) => (IntSchema)base.Rule(rule);
     public override IntSchema Rule(string name, Rule.ResolverFn resolve) => (IntSchema)base.Rule(name, resolve);
     public override IntSchema Required() => (IntSchema)base.Required();

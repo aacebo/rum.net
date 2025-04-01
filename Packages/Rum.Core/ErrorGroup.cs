@@ -8,18 +8,35 @@ namespace Rum.Core;
 /// </summary>
 public class ErrorGroup : IError
 {
+    [JsonPropertyName("message")]
+    [JsonPropertyOrder(0)]
+    public string? Message { get; set; }
+
+    [JsonPropertyName("errors")]
+    [JsonPropertyOrder(1)]
+    public IList<IError>? Errors { get; set; }
+
     [JsonIgnore]
     public bool Empty => Errors == null || Errors.Count == 0;
 
     [JsonIgnore]
     public int Count => Errors?.Count ?? 0;
 
-    [JsonIgnore]
-    public string Message => ToString();
+    public ErrorGroup(string? message = null)
+    {
+        Message = message;
+    }
 
-    [JsonPropertyName("errors")]
-    [JsonPropertyOrder(0)]
-    public IList<IError>? Errors { get; set; }
+    public ErrorGroup(params IError[] errors)
+    {
+        Errors = errors;
+    }
+
+    public ErrorGroup(string message, params IError[] errors)
+    {
+        Message = message;
+        Errors = errors;
+    }
 
     public ErrorGroup Add(IError error)
     {
@@ -29,7 +46,6 @@ public class ErrorGroup : IError
     }
 
     public string GetError() => ToString();
-
     public override string ToString()
     {
         return JsonSerializer.Serialize(this, new JsonSerializerOptions()

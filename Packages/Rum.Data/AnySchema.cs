@@ -23,10 +23,17 @@ public class AnySchema<T> : ISchema<T?>
     public virtual string Name => "any";
 
     protected List<IRule> Rules { get; set; } = [];
+    protected string? _message;
 
     public virtual AnySchema<T> Rule(IRule rule)
     {
         Rules.Add(rule);
+        return this;
+    }
+
+    public virtual AnySchema<T> Message(string message)
+    {
+        _message = message;
         return this;
     }
 
@@ -57,7 +64,7 @@ public class AnySchema<T> : ISchema<T?>
 
     public virtual IResult<T?> Validate(object? value)
     {
-        var errors = new ErrorGroup();
+        var errors = new ErrorGroup(_message);
         var current = value;
 
         foreach (var rule in Rules)
@@ -81,7 +88,7 @@ public class AnySchema<T> : ISchema<T?>
 
         if (res.Error != null)
         {
-            return Result<object?>.Err(res.Error);
+            return _message != null ? Result<object?>.Err(_message) : Result<object?>.Err(res.Error);
         }
 
         return Result<object?>.Ok(res.Value);

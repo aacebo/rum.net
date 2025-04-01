@@ -1,4 +1,6 @@
-﻿using Xunit.Abstractions;
+﻿using Rum.Core;
+
+using Xunit.Abstractions;
 
 namespace Rum.Data.Tests;
 
@@ -23,6 +25,14 @@ public class AnySchemaTests(ITestOutputHelper output)
 
         Assert.Null(res.Error);
         Assert.Equal("testing", res.Value);
+    }
+
+    [Fact]
+    public void Message_ShouldError()
+    {
+        var res = Schemas.Any().Required().Message("a test message").Validate(null);
+        Assert.NotNull(res.Error);
+        Assert.Equal("a test message", ((ErrorGroup)res.Error).Message);
     }
 
     [Fact]

@@ -27,6 +27,7 @@ public class BoolSchema : AnySchema<bool?>, ISchema<bool?>
         }));
     }
 
+    public override BoolSchema Message(string message) => (BoolSchema)base.Message(message);
     public override BoolSchema Rule(IRule rule) => (BoolSchema)base.Rule(rule);
     public override BoolSchema Rule(string name, Rule.ResolverFn resolve) => (BoolSchema)base.Rule(name, resolve);
     public override BoolSchema Required() => (BoolSchema)base.Required();

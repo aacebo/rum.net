@@ -28,6 +28,7 @@ public class DoubleSchema : AnySchema<double?>, ISchema<double?>
         }));
     }
 
+    public override DoubleSchema Message(string message) => (DoubleSchema)base.Message(message);
     public override DoubleSchema Rule(IRule rule) => (DoubleSchema)base.Rule(rule);
     public override DoubleSchema Rule(string name, Rule.ResolverFn resolve) => (DoubleSchema)base.Rule(name, resolve);
     public override DoubleSchema Required() => (DoubleSchema)base.Required();
