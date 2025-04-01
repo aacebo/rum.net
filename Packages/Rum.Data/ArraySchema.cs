@@ -39,6 +39,10 @@ public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
     public override ArraySchema<T> Rule(string name, Rule.ResolverFn resolve) => (ArraySchema<T>)base.Rule(name, resolve);
     public override ArraySchema<T> Required() => (ArraySchema<T>)base.Required();
     public override ArraySchema<T> Not(params IRule[] rules) => (ArraySchema<T>)base.Not(rules);
+
+    public ArraySchema<T> Min(int minLength) => Rule(new Rules.Array.Min(minLength));
+    public ArraySchema<T> Max(int maxLength) => Rule(new Rules.Array.Max(maxLength));
+
     public override IResult<T[]?> Validate(object? value)
     {
         var res = base.Validate(value);
