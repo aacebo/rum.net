@@ -36,5 +36,7 @@ public static partial class Errors
         [JsonPropertyName("message")]
         [JsonPropertyOrder(1)]
         public string Message { get; } = message;
+
+        public string GetError() => Message;
     }
 }

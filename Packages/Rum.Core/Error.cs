@@ -8,11 +8,9 @@ namespace Rum.Core;
 public interface IError
 {
     /// <summary>
-    /// the error message
+    /// get the error in string form
     /// </summary>
-    [JsonPropertyName("message")]
-    [JsonPropertyOrder(0)]
-    public string Message { get; }
+    public string GetError();
 }
 
 /// <summary>
@@ -24,4 +22,6 @@ public class Error(string message) : IError
     [JsonPropertyName("message")]
     [JsonPropertyOrder(0)]
     public string Message { get; } = message;
+
+    public string GetError() => Message;
 }

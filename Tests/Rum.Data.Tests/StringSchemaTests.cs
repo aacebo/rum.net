@@ -41,7 +41,7 @@ public class StringSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -62,7 +62,7 @@ public class StringSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -76,7 +76,7 @@ public class StringSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -90,7 +90,7 @@ public class StringSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -279,7 +279,7 @@ public class StringSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);

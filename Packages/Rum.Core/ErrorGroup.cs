@@ -28,6 +28,8 @@ public class ErrorGroup : IError
         return this;
     }
 
+    public string GetError() => ToString();
+
     public override string ToString()
     {
         return JsonSerializer.Serialize(this, new JsonSerializerOptions()

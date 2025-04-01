@@ -39,7 +39,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -60,7 +60,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -74,7 +74,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -88,7 +88,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -109,7 +109,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -130,7 +130,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -151,7 +151,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -172,7 +172,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -193,7 +193,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -214,7 +214,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -235,7 +235,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);
@@ -256,7 +256,7 @@ public class IntSchemaTests(ITestOutputHelper output)
 
         if (res.Error != null)
         {
-            output.WriteLine(res.Error.Message);
+            output.WriteLine(res.Error.GetError());
         }
 
         Assert.Null(res.Error);

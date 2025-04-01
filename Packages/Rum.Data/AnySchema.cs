@@ -66,7 +66,7 @@ public class AnySchema<T> : ISchema<T?>
 
             if (res.Error != null)
             {
-                errors.Add(Errors.Rule(rule.Name, res.Error.Message));
+                errors.Add(Errors.Rule(rule.Name, res.Error.GetError()));
             }
 
             current = res.Value;
