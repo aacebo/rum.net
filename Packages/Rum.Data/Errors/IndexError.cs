@@ -33,6 +33,9 @@ public static partial class Errors
         [JsonPropertyOrder(0)]
         public int Index { get; } = index;
 
+        /// <summary>
+        /// the error
+        /// </summary>
         [JsonPropertyName("error")]
         [JsonPropertyOrder(1)]
         public IError Error { get; } = error;

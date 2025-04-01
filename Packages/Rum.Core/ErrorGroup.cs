@@ -45,6 +45,11 @@ public class ErrorGroup : IError
         return this;
     }
 
+    public ErrorGroup Add(string message)
+    {
+        return Add(new Error(message));
+    }
+
     public string GetError() => ToString();
     public override string ToString()
     {
