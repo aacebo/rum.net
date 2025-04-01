@@ -2,19 +2,19 @@
 
 namespace Rum.Data.Tests;
 
-public class AnyTests(ITestOutputHelper output)
+public class AnySchemaTests(ITestOutputHelper output)
 {
     [Fact]
     public void Required_ShouldError()
     {
-        var res = new Any().Required().Validate(null);
+        var res = Schemas.Any().Required().Validate(null);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Required_ShouldSucceed()
     {
-        var res = new Any().Required().Validate("testing");
+        var res = Schemas.Any().Required().Validate("testing");
 
         if (res.Error != null)
         {
@@ -28,14 +28,14 @@ public class AnyTests(ITestOutputHelper output)
     [Fact]
     public void Enum_ShouldError()
     {
-        var res = new Any().Enum(1, "test", false).Validate(12);
+        var res = Schemas.Any().Enum(1, "test", false).Validate(12);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Enum_ShouldSucceed()
     {
-        var res = new Any().Enum(1, "test", false).Validate("test");
+        var res = Schemas.Any().Enum(1, "test", false).Validate("test");
 
         if (res.Error != null)
         {
@@ -49,7 +49,7 @@ public class AnyTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldUseDefault()
     {
-        var res = new Any().Default(1).Validate(null);
+        var res = Schemas.Any().Default(1).Validate(null);
 
         if (res.Error != null)
         {
@@ -63,7 +63,7 @@ public class AnyTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldNotUseDefault()
     {
-        var res = new Any().Default(1).Validate("test");
+        var res = Schemas.Any().Default(1).Validate("test");
 
         if (res.Error != null)
         {
@@ -77,14 +77,14 @@ public class AnyTests(ITestOutputHelper output)
     [Fact]
     public void Not_ShouldError()
     {
-        var res = new Any().Not(new Int()).Validate(1);
+        var res = Schemas.Any().Not(Schemas.Int()).Validate(1);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Not_ShouldSucceed()
     {
-        var res = new Any().Not(new Int()).Validate(1.2);
+        var res = Schemas.Any().Not(Schemas.Int()).Validate(1.2);
 
         if (res.Error != null)
         {

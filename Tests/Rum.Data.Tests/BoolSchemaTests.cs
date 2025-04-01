@@ -2,19 +2,19 @@ using Xunit.Abstractions;
 
 namespace Rum.Data.Tests;
 
-public class BoolTests(ITestOutputHelper output)
+public class BoolSchemaTests(ITestOutputHelper output)
 {
     [Fact]
     public void Bool_ShouldError()
     {
-        var res = new Bool().Validate(1);
+        var res = Schemas.Bool().Validate(1);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Bool_ShouldSucceed()
     {
-        var res = new Bool().Validate(true);
+        var res = Schemas.Bool().Validate(true);
 
         if (res.Error != null)
         {
@@ -28,14 +28,14 @@ public class BoolTests(ITestOutputHelper output)
     [Fact]
     public void Required_ShouldError()
     {
-        var res = new Bool().Required().Validate(null);
+        var res = Schemas.Bool().Required().Validate(null);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Required_ShouldSucceed()
     {
-        var res = new Bool().Required().Validate(false);
+        var res = Schemas.Bool().Required().Validate(false);
 
         if (res.Error != null)
         {
@@ -49,14 +49,14 @@ public class BoolTests(ITestOutputHelper output)
     [Fact]
     public void Enum_ShouldError()
     {
-        var res = new Bool().Enum(false).Validate(true);
+        var res = Schemas.Bool().Enum(false).Validate(true);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Enum_ShouldSucceed()
     {
-        var res = new Bool().Enum(false).Validate(false);
+        var res = Schemas.Bool().Enum(false).Validate(false);
 
         if (res.Error != null)
         {
@@ -70,7 +70,7 @@ public class BoolTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldUseDefault()
     {
-        var res = new Bool().Default(true).Validate(null);
+        var res = Schemas.Bool().Default(true).Validate(null);
 
         if (res.Error != null)
         {
@@ -84,7 +84,7 @@ public class BoolTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldNotUseDefault()
     {
-        var res = new Bool().Default(true).Validate(false);
+        var res = Schemas.Bool().Default(true).Validate(false);
 
         if (res.Error != null)
         {
@@ -98,14 +98,14 @@ public class BoolTests(ITestOutputHelper output)
     [Fact]
     public void Not_ShouldError()
     {
-        var res = new Bool().Not(new Bool().Enum(true)).Validate(true);
+        var res = Schemas.Bool().Not(Schemas.Bool().Enum(true)).Validate(true);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Not_ShouldSucceed()
     {
-        var res = new Bool().Not(new Bool().Enum(true)).Validate(false);
+        var res = Schemas.Bool().Not(Schemas.Bool().Enum(true)).Validate(false);
 
         if (res.Error != null)
         {

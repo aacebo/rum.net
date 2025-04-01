@@ -2,19 +2,19 @@ using Xunit.Abstractions;
 
 namespace Rum.Data.Tests;
 
-public class DoubleTests(ITestOutputHelper output)
+public class DoubleSchemaTests(ITestOutputHelper output)
 {
     [Fact]
     public void Double_ShouldError()
     {
-        var res = new Double().Validate("test");
+        var res = Schemas.Double().Validate("test");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Double_ShouldSucceed()
     {
-        var res = new Double().Validate(10.5);
+        var res = Schemas.Double().Validate(10.5);
 
         if (res.Error != null)
         {
@@ -28,14 +28,14 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Required_ShouldError()
     {
-        var res = new Double().Required().Validate(null);
+        var res = Schemas.Double().Required().Validate(null);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Required_ShouldSucceed()
     {
-        var res = new Double().Required().Validate(1.1);
+        var res = Schemas.Double().Required().Validate(1.1);
 
         if (res.Error != null)
         {
@@ -49,14 +49,14 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Enum_ShouldError()
     {
-        var res = new Double().Enum(1.1, 2.2).Validate(3.3);
+        var res = Schemas.Double().Enum(1.1, 2.2).Validate(3.3);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Enum_ShouldSucceed()
     {
-        var res = new Double().Enum(1.1, 2.2).Validate(2.2);
+        var res = Schemas.Double().Enum(1.1, 2.2).Validate(2.2);
 
         if (res.Error != null)
         {
@@ -70,7 +70,7 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldUseDefault()
     {
-        var res = new Double().Default(1.1).Validate(null);
+        var res = Schemas.Double().Default(1.1).Validate(null);
 
         if (res.Error != null)
         {
@@ -84,7 +84,7 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldNotUseDefault()
     {
-        var res = new Double().Default(1.3).Validate(8000.0);
+        var res = Schemas.Double().Default(1.3).Validate(8000.0);
 
         if (res.Error != null)
         {
@@ -98,14 +98,14 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Min_ShouldError()
     {
-        var res = new Double().Min(50.3).Validate(50.2);
+        var res = Schemas.Double().Min(50.3).Validate(50.2);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Min_ShouldSucceed()
     {
-        var res = new Double().Min(50.1).Validate(50.1);
+        var res = Schemas.Double().Min(50.1).Validate(50.1);
 
         if (res.Error != null)
         {
@@ -119,14 +119,14 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Max_ShouldError()
     {
-        var res = new Double().Max(50.3).Validate(50.4);
+        var res = Schemas.Double().Max(50.3).Validate(50.4);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Max_ShouldSucceed()
     {
-        var res = new Double().Max(50.3).Validate(50.3);
+        var res = Schemas.Double().Max(50.3).Validate(50.3);
 
         if (res.Error != null)
         {
@@ -140,14 +140,14 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Positive_ShouldError()
     {
-        var res = new Double().Positive().Validate(-1);
+        var res = Schemas.Double().Positive().Validate(-1);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Positive_ShouldSucceed()
     {
-        var res = new Double().Positive().Validate(0);
+        var res = Schemas.Double().Positive().Validate(0);
 
         if (res.Error != null)
         {
@@ -161,14 +161,14 @@ public class DoubleTests(ITestOutputHelper output)
     [Fact]
     public void Negative_ShouldError()
     {
-        var res = new Double().Negative().Validate(0);
+        var res = Schemas.Double().Negative().Validate(0);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Negative_ShouldSucceed()
     {
-        var res = new Double().Negative().Validate(-1);
+        var res = Schemas.Double().Negative().Validate(-1);
 
         if (res.Error != null)
         {

@@ -4,19 +4,19 @@ using Xunit.Abstractions;
 
 namespace Rum.Data.Tests;
 
-public class StringTests(ITestOutputHelper output)
+public class StringSchemaTests(ITestOutputHelper output)
 {
     [Fact]
     public void String_ShouldError()
     {
-        var res = new String().Validate(1);
+        var res = Schemas.String().Validate(1);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void String_ShouldSucceed()
     {
-        var res = new String().Validate("testing");
+        var res = Schemas.String().Validate("testing");
 
         if (res.Error != null)
         {
@@ -30,14 +30,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Required_ShouldError()
     {
-        var res = new String().Required().Validate(null);
+        var res = Schemas.String().Required().Validate(null);
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Required_ShouldSucceed()
     {
-        var res = new String().Required().Validate("hi");
+        var res = Schemas.String().Required().Validate("hi");
 
         if (res.Error != null)
         {
@@ -51,14 +51,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Enum_ShouldError()
     {
-        var res = new String().Enum("hello", "world").Validate("hi");
+        var res = Schemas.String().Enum("hello", "world").Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Enum_ShouldSucceed()
     {
-        var res = new String().Enum("hello", "world").Validate("world");
+        var res = Schemas.String().Enum("hello", "world").Validate("world");
 
         if (res.Error != null)
         {
@@ -72,7 +72,7 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldUseDefault()
     {
-        var res = new String().Default("default").Validate(null);
+        var res = Schemas.String().Default("default").Validate(null);
 
         if (res.Error != null)
         {
@@ -86,7 +86,7 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Default_ShouldNotUseDefault()
     {
-        var res = new String().Default("default").Validate("hi");
+        var res = Schemas.String().Default("default").Validate("hi");
 
         if (res.Error != null)
         {
@@ -100,14 +100,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Min_ShouldError()
     {
-        var res = new String().Min(5).Validate("test");
+        var res = Schemas.String().Min(5).Validate("test");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Min_ShouldSucceed()
     {
-        var res = new String().Min(5).Validate("testing");
+        var res = Schemas.String().Min(5).Validate("testing");
 
         if (res.Error != null)
         {
@@ -121,14 +121,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Max_ShouldError()
     {
-        var res = new String().Max(5).Validate("testing");
+        var res = Schemas.String().Max(5).Validate("testing");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Max_ShouldSucceed()
     {
-        var res = new String().Max(5).Validate("test");
+        var res = Schemas.String().Max(5).Validate("test");
 
         if (res.Error != null)
         {
@@ -142,14 +142,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Length_ShouldError()
     {
-        var res = new String().Length(5).Validate("hi");
+        var res = Schemas.String().Length(5).Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Length_ShouldSucceed()
     {
-        var res = new String().Length(5).Validate("hello");
+        var res = Schemas.String().Length(5).Validate("hello");
 
         if (res.Error != null)
         {
@@ -163,14 +163,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Pattern_String_ShouldError()
     {
-        var res = new String().Pattern("[0-9]+").Validate("hi");
+        var res = Schemas.String().Pattern("[0-9]+").Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Pattern_String_ShouldSucceed()
     {
-        var res = new String().Pattern("[0-9]+").Validate("123");
+        var res = Schemas.String().Pattern("[0-9]+").Validate("123");
 
         if (res.Error != null)
         {
@@ -184,14 +184,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Pattern_Regex_ShouldError()
     {
-        var res = new String().Pattern(new Regex("[0-9]+")).Validate("hi");
+        var res = Schemas.String().Pattern(new Regex("[0-9]+")).Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Pattern_Regex_ShouldSucceed()
     {
-        var res = new String().Pattern(new Regex("[0-9]+")).Validate("123");
+        var res = Schemas.String().Pattern(new Regex("[0-9]+")).Validate("123");
 
         if (res.Error != null)
         {
@@ -205,14 +205,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Email_ShouldError()
     {
-        var res = new String().Email().Validate("hi");
+        var res = Schemas.String().Email().Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Email_ShouldSucceed()
     {
-        var res = new String().Email().Validate("test@gmail.com");
+        var res = Schemas.String().Email().Validate("test@gmail.com");
 
         if (res.Error != null)
         {
@@ -226,14 +226,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Guid_ShouldError()
     {
-        var res = new String().Guid().Validate("hi");
+        var res = Schemas.String().Guid().Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Guid_ShouldSucceed()
     {
-        var res = new String().Guid().Validate("076db1e2-c222-4663-a195-b4c7a556e1fd");
+        var res = Schemas.String().Guid().Validate("076db1e2-c222-4663-a195-b4c7a556e1fd");
 
         if (res.Error != null)
         {
@@ -247,14 +247,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Url_ShouldError()
     {
-        var res = new String().Url().Validate("hi");
+        var res = Schemas.String().Url().Validate("hi");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Url_ShouldSucceed()
     {
-        var res = new String().Url().Validate("http://localhost");
+        var res = Schemas.String().Url().Validate("http://localhost");
 
         if (res.Error != null)
         {
@@ -268,14 +268,14 @@ public class StringTests(ITestOutputHelper output)
     [Fact]
     public void Not_ShouldError()
     {
-        var res = new String().Not(new String().Enum("a", "b")).Validate("a");
+        var res = Schemas.String().Not(Schemas.String().Enum("a", "b")).Validate("a");
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Not_ShouldSucceed()
     {
-        var res = new String().Not(new String().Enum("a", "b")).Validate("c");
+        var res = Schemas.String().Not(Schemas.String().Enum("a", "b")).Validate("c");
 
         if (res.Error != null)
         {

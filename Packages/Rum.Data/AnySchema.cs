@@ -2,47 +2,55 @@ using Rum.Core;
 
 namespace Rum.Data;
 
-/// <summary>
-/// Any Schema
-/// </summary>
-public class Any : Any<object>, ISchema<object?>;
+public static partial class Schemas
+{
+    /// <summary>
+    /// Any Schema
+    /// </summary>
+    public static AnySchema Any() => new();
+}
 
 /// <summary>
 /// Any Schema
 /// </summary>
-public class Any<T> : ISchema<T?>
+public class AnySchema : AnySchema<object>, ISchema<object?>;
+
+/// <summary>
+/// Any Schema
+/// </summary>
+public class AnySchema<T> : ISchema<T?>
 {
     public virtual string Name => "any";
 
     protected List<IRule> Rules { get; set; } = [];
 
-    public virtual Any<T> Rule(IRule rule)
+    public virtual AnySchema<T> Rule(IRule rule)
     {
         Rules.Add(rule);
         return this;
     }
 
-    public virtual Any<T> Rule(string name, Rule.ResolverFn resolve)
+    public virtual AnySchema<T> Rule(string name, Rule.ResolverFn resolve)
     {
         return Rule(new Rule(name, resolve));
     }
 
-    public virtual Any<T> Required()
+    public virtual AnySchema<T> Required()
     {
         return Rule(new Rules.Required());
     }
 
-    public virtual Any<T> Enum(params T[] options)
+    public virtual AnySchema<T> Enum(params T[] options)
     {
         return Rule(new Rules.Enum<T>(options));
     }
 
-    public virtual Any<T> Default(T defaultValue)
+    public virtual AnySchema<T> Default(T defaultValue)
     {
         return Rule(new Rules.Default<T>(defaultValue));
     }
 
-    public virtual Any<T> Not(params IRule[] rules)
+    public virtual AnySchema<T> Not(params IRule[] rules)
     {
         return Rule(new Rules.Not(rules));
     }
