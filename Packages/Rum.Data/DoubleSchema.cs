@@ -23,6 +23,8 @@ public class DoubleSchema : AnySchema<double?>, ISchema<double?>
         {
             if (value == null) return Result<object?>.Ok();
             if (value is int asInt) return Result<object?>.Ok((double)asInt);
+            if (value is float asFloat) return Result<object?>.Ok((double)asFloat);
+            if (value is decimal asDecimal) return Result<object?>.Ok((double)asDecimal);
             if (value is double asDouble) return Result<object?>.Ok(asDouble);
             return Result<object?>.Err("must be a double");
         }));
