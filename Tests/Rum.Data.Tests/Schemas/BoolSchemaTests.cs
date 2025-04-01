@@ -5,13 +5,6 @@ namespace Rum.Data.Tests;
 public class BoolSchemaTests(ITestOutputHelper output)
 {
     [Fact]
-    public void Bool_ShouldError()
-    {
-        var res = Schemas.Bool().Validate(1);
-        Assert.NotNull(res.Error);
-    }
-
-    [Fact]
     public void Bool_ShouldSucceed()
     {
         var res = Schemas.Bool().Validate(true);

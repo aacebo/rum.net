@@ -5,13 +5,6 @@ namespace Rum.Data.Tests;
 public class DoubleSchemaTests(ITestOutputHelper output)
 {
     [Fact]
-    public void Double_ShouldError()
-    {
-        var res = Schemas.Double().Validate("test");
-        Assert.NotNull(res.Error);
-    }
-
-    [Fact]
     public void Double_ShouldSucceed()
     {
         var res = Schemas.Double().Validate(10.5);

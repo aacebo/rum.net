@@ -1,10 +1,13 @@
 using System.Text.Json.Serialization;
 
+using Rum.Core.Json;
+
 namespace Rum.Core;
 
 /// <summary>
 /// Any Error
 /// </summary>
+[JsonConverter(typeof(TrueTypeJsonConverter<IError>))]
 public interface IError
 {
     /// <summary>
