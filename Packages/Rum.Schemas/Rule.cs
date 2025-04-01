@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using Rum.Core;
 
 namespace Rum.Schemas;
@@ -10,6 +12,8 @@ public interface IRule
     /// <summary>
     /// the unique rule identifier
     /// </summary>
+    [JsonPropertyName("name")]
+    [JsonPropertyOrder(0)]
     public string Name { get; }
 
     /// <summary>
@@ -30,6 +34,8 @@ public class Rule(string name, Rule.ResolverFn resolver) : IRule
     /// <summary>
     /// the unique rule identifier
     /// </summary>
+    [JsonPropertyName("name")]
+    [JsonPropertyOrder(0)]
     public string Name { get; set; } = name;
 
     /// <summary>
