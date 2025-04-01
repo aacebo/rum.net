@@ -100,14 +100,14 @@ public class ArraySchemaTests(ITestOutputHelper output)
     public void Array_Max_ShouldError()
     {
         var schema = Schemas.Array(Schemas.String()).Max(2);
-        var res = schema.Validate(new List<object>() { "a", "b", "c" });
+        var res = schema.Validate(new object[] { "a", "b", "c" });
         Assert.NotNull(res.Error);
     }
 
     [Fact]
     public void Array_Max_ShouldSucceed()
     {
-        var value = new List<object>() { "a", "b" };
+        var value = new object[] { "a", "b" };
         var schema = Schemas.Array(Schemas.String()).Max(2);
         var res = schema.Validate(value);
 
