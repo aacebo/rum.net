@@ -34,6 +34,7 @@ public class StringSchema : AnySchema<string?>, ISchema<string?>
     public override StringSchema Required() => (StringSchema)base.Required();
     public override StringSchema Enum(params string?[] options) => (StringSchema)base.Enum(options);
     public override StringSchema Default(string? defaultValue) => (StringSchema)base.Default(defaultValue);
+    public override StringSchema Transform(Func<string?, string?> transform) => (StringSchema)base.Transform(transform);
 
     public StringSchema Min(int min) => Rule(new Rules.String.Min(min));
     public StringSchema Max(int max) => Rule(new Rules.String.Max(max));

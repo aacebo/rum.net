@@ -57,6 +57,11 @@ public class AnySchema<T> : ISchema<T?>
         return Rule(new Rules.Default<T>(defaultValue));
     }
 
+    public virtual AnySchema<T> Transform(Func<T?, T?> transform)
+    {
+        return Rule(new Rules.Transform<T>(transform));
+    }
+
     public virtual IResult<T?> Validate(object? value)
     {
         var errors = new ErrorGroup(_message);

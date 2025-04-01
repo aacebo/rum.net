@@ -24,6 +24,7 @@ public class OrSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obje
     public override OrSchema Rule(string name, Rule.ResolverFn resolve) => (OrSchema)base.Rule(name, resolve);
     public override OrSchema Required() => (OrSchema)base.Required();
     public override OrSchema Default(object? defaultValue) => (OrSchema)base.Default(defaultValue);
+    public override OrSchema Transform(Func<object?, object?> transform) => (OrSchema)base.Transform(transform);
     public override IResult<object?> Validate(object? value)
     {
         var res = base.Validate(value);

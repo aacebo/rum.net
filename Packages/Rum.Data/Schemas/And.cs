@@ -24,6 +24,7 @@ public class AndSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
     public override AndSchema Rule(string name, Rule.ResolverFn resolve) => (AndSchema)base.Rule(name, resolve);
     public override AndSchema Required() => (AndSchema)base.Required();
     public override AndSchema Default(object? defaultValue) => (AndSchema)base.Default(defaultValue);
+    public override AndSchema Transform(Func<object?, object?> transform) => (AndSchema)base.Transform(transform);
     public override IResult<object?> Validate(object? value)
     {
         var res = base.Validate(value);

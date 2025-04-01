@@ -83,4 +83,18 @@ public class AnySchemaTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal("test", res.Value);
     }
+
+    [Fact]
+    public void Transform_ShouldTransform()
+    {
+        var res = Schemas.Any().Transform(_ => "test").Validate(null);
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.GetError());
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal("test", res.Value);
+    }
 }

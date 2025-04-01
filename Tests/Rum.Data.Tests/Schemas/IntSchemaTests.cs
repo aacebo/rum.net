@@ -241,4 +241,18 @@ public class IntSchemaTests(ITestOutputHelper output)
         Assert.Null(res.Error);
         Assert.Equal(19, res.Value);
     }
+
+    [Fact]
+    public void Transform_ShouldTransform()
+    {
+        var res = Schemas.Int().Transform(v => v + 1).Validate(19);
+
+        if (res.Error != null)
+        {
+            output.WriteLine(res.Error.GetError());
+        }
+
+        Assert.Null(res.Error);
+        Assert.Equal(20, res.Value);
+    }
 }

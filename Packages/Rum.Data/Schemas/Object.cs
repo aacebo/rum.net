@@ -31,6 +31,8 @@ public class ObjectSchema : AnySchema<object?>, ISchema<object?>
     public override ObjectSchema Rule(IRule rule) => (ObjectSchema)base.Rule(rule);
     public override ObjectSchema Rule(string name, Rule.ResolverFn resolve) => (ObjectSchema)base.Rule(name, resolve);
     public override ObjectSchema Required() => (ObjectSchema)base.Required();
+    public override ObjectSchema Default(object? defaultValue) => (ObjectSchema)base.Default(defaultValue);
+    public override ObjectSchema Transform(Func<object?, object?> transform) => (ObjectSchema)base.Transform(transform);
 
     public ObjectSchema Property(string name, IRule rule)
     {
