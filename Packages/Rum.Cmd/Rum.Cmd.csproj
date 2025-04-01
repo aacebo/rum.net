@@ -3,7 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Rum.Core\Rum.Core.csproj" />
     <ProjectReference Include="..\Rum.Logging\Rum.Logging.csproj" />
-    <ProjectReference Include="..\Rum.Schemas\Rum.Schemas.csproj" />
+    <ProjectReference Include="..\Rum.Data\Rum.Data.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
