@@ -7,6 +7,13 @@ namespace Rum.Data.Tests;
 public class StringSchemaTests(ITestOutputHelper output)
 {
     [Fact]
+    public void String_ShouldError()
+    {
+        var res = Schemas.String().Validate(1);
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
     public void String_ShouldSucceed()
     {
         var res = Schemas.String().Validate("testing");

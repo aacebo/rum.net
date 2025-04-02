@@ -12,5 +12,5 @@ public partial interface ISchema<T> : IRule
     /// </summary>
     /// <param name="value">the input value</param>
     /// <returns>the validation result</returns>
-    public IResult<T> Validate(T value);
+    public IResult<T> Validate(object? value);
 }

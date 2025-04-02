@@ -5,6 +5,13 @@ namespace Rum.Data.Tests;
 public class IntSchemaTests(ITestOutputHelper output)
 {
     [Fact]
+    public void Int_ShouldError()
+    {
+        var res = Schemas.Int().Validate(11.5);
+        Assert.NotNull(res.Error);
+    }
+
+    [Fact]
     public void Int_ShouldSucceed()
     {
         var res = Schemas.Int().Validate(10);

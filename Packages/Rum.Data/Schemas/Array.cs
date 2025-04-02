@@ -44,8 +44,7 @@ public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
     public ArraySchema<T> Min(int minLength) => Rule(new Rules.Array.Min(minLength));
     public ArraySchema<T> Max(int maxLength) => Rule(new Rules.Array.Max(maxLength));
 
-    public IResult<T[]?> Validate(List<T>? value) => Validate(value?.ToArray());
-    public override IResult<T[]?> Validate(T[]? value)
+    public override IResult<T[]?> Validate(object? value)
     {
         var res = base.Validate(value);
 

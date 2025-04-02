@@ -13,12 +13,12 @@ public static partial class Schemas
 /// <summary>
 /// Any Schema
 /// </summary>
-public class AnySchema : AnySchema<object?>, ISchema<object?>;
+public class AnySchema : AnySchema<object>, ISchema<object?>;
 
 /// <summary>
 /// Any Schema
 /// </summary>
-public class AnySchema<T> : ISchema<T>
+public class AnySchema<T> : ISchema<T?>
 {
     public virtual string Name => "any";
 
@@ -57,12 +57,12 @@ public class AnySchema<T> : ISchema<T>
         return Rule(new Rules.Default<T>(defaultValue));
     }
 
-    public virtual AnySchema<T> Transform(Func<T, T> transform)
+    public virtual AnySchema<T> Transform(Func<T?, T?> transform)
     {
         return Rule(new Rules.Transform<T>(transform));
     }
 
-    public virtual IResult<T> Validate(T value)
+    public virtual IResult<T?> Validate(object? value)
     {
         var errors = new ErrorGroup(_message);
         var current = value;
@@ -76,23 +76,15 @@ public class AnySchema<T> : ISchema<T>
                 errors.Add(Errors.Rule(rule.Name, res.Error.GetError()));
             }
 
-            if (res.Value is T parsed)
-            {
-                current = parsed;
-            }
+            current = res.Value;
         }
 
-        return errors.Empty ? Result<T>.Ok(current) : Result<T>.Err(errors);
+        return errors.Empty ? Result<T?>.Ok((T?)current) : Result<T?>.Err(errors);
     }
 
     public IResult<object?> Resolve(object? value)
     {
-        if (value is not T)
-        {
-            return Result<object?>.Err($"type '{value?.GetType().Name ?? "null"}' is not compatible with '{typeof(T).Name}'");
-        }
-
-        var res = Validate((T)value);
+        var res = Validate(value);
 
         if (res.Error != null)
         {
