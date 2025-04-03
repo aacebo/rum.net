@@ -17,7 +17,7 @@ public class IntSchema : AnySchema
 {
     public override string Name => "int";
 
-    public IntSchema() : base()
+    public IntSchema(AnySchema? schema = null) : base(schema)
     {
         Rule(new Rule("int", value =>
         {
