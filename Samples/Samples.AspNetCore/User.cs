@@ -4,7 +4,8 @@ namespace Samples.AspNetCore;
 
 public class User
 {
-    [Default("test")]
     [Required]
+    [Default("test")]
+    [Enum(1, "test")]
     public string? Username { get; set; }
 }
