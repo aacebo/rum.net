@@ -5,11 +5,16 @@ namespace Rum.Data.Annotations;
     Inherited = true,
     AllowMultiple = true
 )]
-public abstract class SchemaAttribute() : Attribute
+public abstract class SchemaAttribute(string? Message = null) : Attribute
 {
+    /// <summary>
+    /// the custom error message
+    /// </summary>
+    public string? Message { get; private set; } = Message;
+
     /// <summary>
     /// apply the attribute rules
     /// to the schema
     /// </summary>
-    public abstract AnySchema<object?> Apply(AnySchema<object?> schema);
+    public abstract AnySchema Apply(AnySchema schema);
 }

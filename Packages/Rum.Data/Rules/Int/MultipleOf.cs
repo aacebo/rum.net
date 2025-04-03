@@ -10,9 +10,9 @@ public class MultipleOf(int multipleOf) : IRule
     public string Name => "int.multipleOf";
     public string Message => $"must have value that is multiple of {multipleOf}";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return (multipleOf % ((int)value)) == 0 ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return (multipleOf % ((int)value)) == 0 ? Result.Ok(value) : Result.Err(Message);
     }
 }

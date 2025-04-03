@@ -7,45 +7,40 @@ public static partial class Schemas
     /// <summary>
     /// Schema used to validate arrays
     /// </summary>
-    public static ArraySchema<T> Array<T>(params IRule[] items) => new(items);
-
-    /// <summary>
-    /// Schema used to validate arrays
-    /// </summary>
-    public static ArraySchema<object?> Array(params IRule[] items) => new(items);
+    public static ArraySchema Array(params ISchema[] items) => new(items);
 }
 
 /// <summary>
 /// Schema used to validate arrays
 /// </summary>
-public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
+public class ArraySchema : AnySchema
 {
     public override string Name => "array";
-    public readonly IRule[] Items;
+    public readonly ISchema[] Items;
 
-    public ArraySchema(params IRule[] items) : base()
+    public ArraySchema(params ISchema[] items) : base()
     {
         Items = items;
         Rule(new Rule("array", value =>
         {
-            if (value == null) return Result<object?>.Ok();
-            if (value is T[] asArray) return Result<object?>.Ok(asArray);
-            if (value is IEnumerable<T> asEnum) return Result<object?>.Ok(asEnum.ToArray());
-            return Result<object?>.Err("must be an array");
+            if (value == null) return Result.Ok();
+            if (value is object?[] asArray) return Result.Ok(asArray);
+            if (value is IEnumerable<object?> asEnum) return Result.Ok(asEnum.ToArray());
+            return Result.Err("must be an array");
         }));
     }
 
-    public override ArraySchema<T> Message(string message) => (ArraySchema<T>)base.Message(message);
-    public override ArraySchema<T> Rule(IRule rule) => (ArraySchema<T>)base.Rule(rule);
-    public override ArraySchema<T> Rule(string name, Rule.ResolverFn resolve) => (ArraySchema<T>)base.Rule(name, resolve);
-    public override ArraySchema<T> Required() => (ArraySchema<T>)base.Required();
-    public override ArraySchema<T> Transform(Func<T[]?, T[]?> transform) => (ArraySchema<T>)base.Transform(transform);
-    public override ArraySchema<T> Merge<R>(AnySchema<R> schema) => (ArraySchema<T>)base.Merge(schema);
+    public override ArraySchema Message(string message) => (ArraySchema)base.Message(message);
+    public override ArraySchema Rule(IRule rule) => (ArraySchema)base.Rule(rule);
+    public override ArraySchema Rule(string name, Rule.ResolverFn resolve) => (ArraySchema)base.Rule(name, resolve);
+    public override ArraySchema Required() => (ArraySchema)base.Required();
+    public override ArraySchema Merge(AnySchema schema) => (ArraySchema)base.Merge(schema);
 
-    public ArraySchema<T> Min(int minLength) => Rule(new Rules.Array.Min(minLength));
-    public ArraySchema<T> Max(int maxLength) => Rule(new Rules.Array.Max(maxLength));
+    public ArraySchema Transform(Func<object[]?, object[]?> transform) => (ArraySchema)base.Transform(transform);
+    public ArraySchema Min(int minLength) => Rule(new Rules.Array.Min(minLength));
+    public ArraySchema Max(int maxLength) => Rule(new Rules.Array.Max(maxLength));
 
-    public override IResult<T[]?> Validate(object? value)
+    public override IResult<object> Validate(object? value)
     {
         var res = base.Validate(value);
 
@@ -55,18 +50,18 @@ public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
         }
 
         var errors = new ErrorGroup(_message);
-        var list = res.Value ?? [];
+        var list = ((object[]?)res.Value) ?? [];
 
         for (var i = 0; i < list.Length; i++)
         {
-            var rule = Items.Length == 1 ? Items.First() : i < Items.Length ? Items[i] : null;
+            var schema = Items.Length == 1 ? Items.First() : i < Items.Length ? Items[i] : null;
 
-            if (rule == null)
+            if (schema == null)
             {
                 continue;
             }
 
-            var result = new Result<T>(rule.Resolve(list[i]));
+            var result = schema.Validate(list[i]);
 
             if (result.Error != null)
             {
@@ -79,6 +74,6 @@ public class ArraySchema<T> : AnySchema<T[]?>, ISchema<T[]?>
             }
         }
 
-        return errors.Empty ? Result<T[]?>.Ok(list) : Result<T[]?>.Err(errors);
+        return errors.Empty ? Result.Ok(list) : Result.Err(errors);
     }
 }

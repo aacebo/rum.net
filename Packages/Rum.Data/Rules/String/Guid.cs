@@ -10,9 +10,9 @@ public class Guid : IRule
     public string Name => "string.guid";
     public string Message => "must be a valid GUID (UUID)";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return System.Guid.TryParse((string)value, out var _) ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return System.Guid.TryParse((string)value, out var _) ? Result.Ok(value) : Result.Err(Message);
     }
 }

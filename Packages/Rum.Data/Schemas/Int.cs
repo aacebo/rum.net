@@ -13,7 +13,7 @@ public static partial class Schemas
 /// <summary>
 /// Schema used to validate integers
 /// </summary>
-public class IntSchema : AnySchema<int?>, ISchema<int?>
+public class IntSchema : AnySchema
 {
     public override string Name => "int";
 
@@ -21,9 +21,9 @@ public class IntSchema : AnySchema<int?>, ISchema<int?>
     {
         Rule(new Rule("int", value =>
         {
-            if (value == null) return Result<object?>.Ok();
-            if (value is int asInt) return Result<object?>.Ok(asInt);
-            return Result<object?>.Err("must be an integer");
+            if (value == null) return Result.Ok();
+            if (value is int asInt) return Result.Ok(asInt);
+            return Result.Err("must be an integer");
         }));
     }
 
@@ -31,11 +31,11 @@ public class IntSchema : AnySchema<int?>, ISchema<int?>
     public override IntSchema Rule(IRule rule) => (IntSchema)base.Rule(rule);
     public override IntSchema Rule(string name, Rule.ResolverFn resolve) => (IntSchema)base.Rule(name, resolve);
     public override IntSchema Required() => (IntSchema)base.Required();
-    public override IntSchema Enum(params int?[] options) => (IntSchema)base.Enum(options);
-    public override IntSchema Default(int? defaultValue) => (IntSchema)base.Default(defaultValue);
-    public override IntSchema Transform(Func<int?, int?> transform) => (IntSchema)base.Transform(transform);
-    public override IntSchema Merge<R>(AnySchema<R> schema) => (IntSchema)base.Merge(schema);
+    public override IntSchema Merge(AnySchema schema) => (IntSchema)base.Merge(schema);
 
+    public IntSchema Enum(params int[] options) => (IntSchema)base.Enum(options);
+    public IntSchema Default(int defaultValue) => (IntSchema)base.Default(defaultValue);
+    public IntSchema Transform(Func<int?, int?> transform) => (IntSchema)base.Transform(transform);
     public IntSchema Min(int min) => Rule(new Rules.Int.Min(min));
     public IntSchema Max(int max) => Rule(new Rules.Int.Max(max));
     public IntSchema MultipleOf(int multipleOf) => Rule(new Rules.Int.MultipleOf(multipleOf));

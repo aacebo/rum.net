@@ -8,14 +8,14 @@ public static partial class Schemas
     /// Schema used to validate if no other
     //  schema matches the input
     /// </summary>
-    public static NotSchema Not(params IRule[] rules) => new(rules);
+    public static NotSchema Not(params ISchema[] schemas) => new(schemas);
 }
 
 /// <summary>
 /// Schema used to validate if no other
 //  schema matches the input
 /// </summary>
-public class NotSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<object?>
+public class NotSchema(params ISchema[] schemas) : AnySchema
 {
     public override string Name => "or";
 
@@ -23,10 +23,10 @@ public class NotSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
     public override NotSchema Rule(IRule rule) => (NotSchema)base.Rule(rule);
     public override NotSchema Rule(string name, Rule.ResolverFn resolve) => (NotSchema)base.Rule(name, resolve);
     public override NotSchema Required() => (NotSchema)base.Required();
-    public override NotSchema Default(object? defaultValue) => (NotSchema)base.Default(defaultValue);
+    public override NotSchema Default(object defaultValue) => (NotSchema)base.Default(defaultValue);
     public override NotSchema Transform(Func<object?, object?> transform) => (NotSchema)base.Transform(transform);
-    public override NotSchema Merge<R>(AnySchema<R> schema) => (NotSchema)base.Merge(schema);
-    public override IResult<object?> Validate(object? value)
+    public override NotSchema Merge(AnySchema schema) => (NotSchema)base.Merge(schema);
+    public override IResult<object> Validate(object? value)
     {
         var res = base.Validate(value);
 
@@ -35,16 +35,16 @@ public class NotSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
             return res;
         }
 
-        foreach (var rule in rules)
+        foreach (var schema in schemas)
         {
-            var result = rule.Resolve(value);
+            var result = schema.Validate(value);
 
             if (result.Error == null)
             {
-                return Result<object?>.Err($"expected not to be: [{string.Join(", ", rules.Select(r => r.Name))}]");
+                return Result.Err($"expected not to be: [{string.Join(", ", schemas.Select(r => r.Name))}]");
             }
         }
 
-        return Result<object?>.Ok(value);
+        return Result.Ok(value);
     }
 }

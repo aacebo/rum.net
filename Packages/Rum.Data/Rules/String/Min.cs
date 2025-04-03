@@ -10,9 +10,9 @@ public class Min(int min) : IRule
     public string Name => "string.min";
     public string Message => $"must have length of at least {min}";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return ((string)value).Length >= min ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return ((string)value).Length >= min ? Result.Ok(value) : Result.Err(Message);
     }
 }

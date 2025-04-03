@@ -10,9 +10,9 @@ public class Max(double max) : IRule
     public string Name => "double.max";
     public string Message => $"must have value of at most {max}";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return ((double)value) <= max ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return ((double)value) <= max ? Result.Ok(value) : Result.Err(Message);
     }
 }

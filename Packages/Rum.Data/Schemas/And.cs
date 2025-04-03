@@ -8,14 +8,14 @@ public static partial class Schemas
     /// Schema used to validate if all
     /// schemas matches the input
     /// </summary>
-    public static AndSchema And(params IRule[] rules) => new(rules);
+    public static AndSchema And(params ISchema[] schemas) => new(schemas);
 }
 
 /// <summary>
 /// Schema used to validate if all
 /// schemas matches the input
 /// </summary>
-public class AndSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<object?>
+public class AndSchema(params ISchema[] schemas) : AnySchema()
 {
     public override string Name => "and";
 
@@ -23,10 +23,10 @@ public class AndSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
     public override AndSchema Rule(IRule rule) => (AndSchema)base.Rule(rule);
     public override AndSchema Rule(string name, Rule.ResolverFn resolve) => (AndSchema)base.Rule(name, resolve);
     public override AndSchema Required() => (AndSchema)base.Required();
-    public override AndSchema Default(object? defaultValue) => (AndSchema)base.Default(defaultValue);
+    public override AndSchema Default(object defaultValue) => (AndSchema)base.Default(defaultValue);
     public override AndSchema Transform(Func<object?, object?> transform) => (AndSchema)base.Transform(transform);
-    public override AndSchema Merge<R>(AnySchema<R> schema) => (AndSchema)base.Merge(schema);
-    public override IResult<object?> Validate(object? value)
+    public override AndSchema Merge(AnySchema schema) => (AndSchema)base.Merge(schema);
+    public override IResult<object> Validate(object? value)
     {
         var res = base.Validate(value);
 
@@ -38,9 +38,9 @@ public class AndSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
         var errors = new ErrorGroup(_message);
         var current = res.Value;
 
-        foreach (var rule in rules)
+        foreach (var schema in schemas)
         {
-            var result = rule.Resolve(current);
+            var result = schema.Validate(current);
 
             if (result.Error != null)
             {
@@ -52,6 +52,6 @@ public class AndSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
             }
         }
 
-        return errors.Empty ? Result<object?>.Ok(current) : Result<object?>.Err(errors);
+        return errors.Empty ? Result.Ok(current) : Result.Err(errors);
     }
 }

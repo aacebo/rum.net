@@ -5,10 +5,17 @@ namespace Rum.Data.Annotations;
     Inherited = true,
     AllowMultiple = true
 )]
-public class RequiredAttribute() : SchemaAttribute
+public class RequiredAttribute(string? Message = null) : SchemaAttribute(Message)
 {
-    public override AnySchema<object?> Apply(AnySchema<object?> schema)
+    public override AnySchema Apply(AnySchema schema)
     {
-        return schema.Required();
+        schema = schema.Required();
+
+        if (Message != null)
+        {
+            schema = schema.Message(Message);
+        }
+
+        return schema;
     }
 }

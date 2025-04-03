@@ -10,9 +10,9 @@ public class Length(int length) : IRule
     public string Name => "string.length";
     public string Message => $"must have length of {length}";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return ((string)value).Length == length ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return ((string)value).Length == length ? Result.Ok(value) : Result.Err(Message);
     }
 }

@@ -13,7 +13,7 @@ public static partial class Schemas
 /// <summary>
 /// Schema used to validate booleans
 /// </summary>
-public class BoolSchema : AnySchema<bool?>, ISchema<bool?>
+public class BoolSchema : AnySchema
 {
     public override string Name => "bool";
 
@@ -21,9 +21,9 @@ public class BoolSchema : AnySchema<bool?>, ISchema<bool?>
     {
         Rule(new Rule("bool", value =>
         {
-            if (value == null) return Result<object?>.Ok();
-            if (value is bool asBool) return Result<object?>.Ok(asBool);
-            return Result<object?>.Err("must be a bool");
+            if (value == null) return Result.Ok();
+            if (value is bool asBool) return Result.Ok(asBool);
+            return Result.Err("must be a bool");
         }));
     }
 
@@ -31,8 +31,9 @@ public class BoolSchema : AnySchema<bool?>, ISchema<bool?>
     public override BoolSchema Rule(IRule rule) => (BoolSchema)base.Rule(rule);
     public override BoolSchema Rule(string name, Rule.ResolverFn resolve) => (BoolSchema)base.Rule(name, resolve);
     public override BoolSchema Required() => (BoolSchema)base.Required();
-    public override BoolSchema Enum(params bool?[] options) => (BoolSchema)base.Enum(options);
-    public override BoolSchema Default(bool? defaultValue) => (BoolSchema)base.Default(defaultValue);
-    public override BoolSchema Transform(Func<bool?, bool?> transform) => (BoolSchema)base.Transform(transform);
-    public override BoolSchema Merge<R>(AnySchema<R> schema) => (BoolSchema)base.Merge(schema);
+    public override BoolSchema Merge(AnySchema schema) => (BoolSchema)base.Merge(schema);
+
+    public BoolSchema Enum(params bool[] options) => (BoolSchema)base.Enum(options);
+    public BoolSchema Default(bool defaultValue) => (BoolSchema)base.Default(defaultValue);
+    public BoolSchema Transform(Func<bool?, bool?> transform) => (BoolSchema)base.Transform(transform);
 }

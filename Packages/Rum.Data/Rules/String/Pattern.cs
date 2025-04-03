@@ -17,9 +17,9 @@ public class Pattern : IRule
     public Pattern(string pattern) => _pattern = new Regex(pattern);
     public Pattern(Regex pattern) => _pattern = pattern;
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return _pattern.IsMatch((string)value) ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return _pattern.IsMatch((string)value) ? Result.Ok(value) : Result.Err(Message);
     }
 }

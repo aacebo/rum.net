@@ -1,19 +1,19 @@
 using System.Text.Json.Serialization;
 
 using Rum.Core;
+using Rum.Core.Json;
 
 namespace Rum.Data;
 
 /// <summary>
 /// Any Validation Rule
 /// </summary>
+[JsonConverter(typeof(TrueTypeJsonConverter<IRule>))]
 public interface IRule
 {
     /// <summary>
     /// the unique rule identifier
     /// </summary>
-    [JsonPropertyName("name")]
-    [JsonPropertyOrder(0)]
     public string Name { get; }
 
     /// <summary>
@@ -21,7 +21,7 @@ public interface IRule
     /// </summary>
     /// <param name="value">the input value</param>
     /// <returns>the result, with either an ouput value or error</returns>
-    public IResult<object?> Resolve(object? value);
+    public IResult<object> Resolve(object? value);
 }
 
 /// <summary>
@@ -48,7 +48,7 @@ public class Rule(string name, Rule.ResolverFn resolver) : IRule
     /// </summary>
     /// <param name="value">the input value</param>
     /// <returns>the result, with either an ouput value or error</returns>
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
         return Resolver(value);
     }
@@ -56,5 +56,5 @@ public class Rule(string name, Rule.ResolverFn resolver) : IRule
     /// <summary>
     /// Rule Resolver
     /// </summary>
-    public delegate IResult<object?> ResolverFn(object? value);
+    public delegate IResult<object> ResolverFn(object? value);
 }

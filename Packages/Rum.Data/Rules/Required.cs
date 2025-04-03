@@ -9,8 +9,8 @@ public class Required : IRule
 {
     public string Name => "required";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        return value != null ? Result<object?>.Ok(value) : Result<object?>.Err(Name);
+        return value != null ? Result.Ok(value) : Result.Err(Name);
     }
 }

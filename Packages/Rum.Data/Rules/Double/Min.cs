@@ -10,9 +10,9 @@ public class Min(double min) : IRule
     public string Name => "double.min";
     public string Message => $"must have value of at least {min}";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return ((double)value) >= min ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return ((double)value) >= min ? Result.Ok(value) : Result.Err(Message);
     }
 }

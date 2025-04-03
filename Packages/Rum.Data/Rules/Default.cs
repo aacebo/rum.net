@@ -9,8 +9,8 @@ public class Default<T>(T defaultValue) : IRule
 {
     public string Name => "default";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        return Result<object?>.Ok(value ?? defaultValue);
+        return Result.Ok(value ?? defaultValue);
     }
 }

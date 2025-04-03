@@ -1,6 +1,6 @@
 namespace Rum.Data.Annotations.Tests;
 
-public class RequiredAttributeTests()
+public class AnyAttributeTests()
 {
     public class UserLogin
     {

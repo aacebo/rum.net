@@ -5,12 +5,19 @@ namespace Rum.Data.Annotations;
     Inherited = true,
     AllowMultiple = true
 )]
-public class EnumAttribute(params object?[] options) : SchemaAttribute
+public class EnumAttribute(object[]? Options = null, string? Message = null) : SchemaAttribute(Message)
 {
-    public object?[] Options { get; private set; } = options;
+    public object[] Options { get; private set; } = Options ?? [];
 
-    public override AnySchema<object?> Apply(AnySchema<object?> schema)
+    public override AnySchema Apply(AnySchema schema)
     {
-        return schema.Enum(Options);
+        schema = schema.Enum(Options);
+
+        if (Message != null)
+        {
+            schema = schema.Message(Message);
+        }
+
+        return schema;
     }
 }

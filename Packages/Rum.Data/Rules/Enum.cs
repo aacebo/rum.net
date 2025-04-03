@@ -11,9 +11,9 @@ public class Enum<T>(params T[] options) : IRule
     public T[] Options { get; } = options;
     public string Message => $"must be one of [{string.Join(", ", Options.Select(o => o?.ToString()))}]";
 
-    public IResult<object?> Resolve(object? value)
+    public IResult<object> Resolve(object? value)
     {
-        if (value == null) return Result<object?>.Ok();
-        return Options.Contains((T?)value) ? Result<object?>.Ok(value) : Result<object?>.Err(Message);
+        if (value == null) return Result.Ok();
+        return Options.Contains((T?)value) ? Result.Ok(value) : Result.Err(Message);
     }
 }

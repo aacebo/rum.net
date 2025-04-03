@@ -7,33 +7,33 @@ namespace Rum.Data;
 
 public static partial class Schemas
 {
-    public static IResult<object?> Validate(object value)
+    public static IResult<object> Validate(object value)
     {
         return Validate(value, value.GetType());
     }
 
-    public static IResult<T?> Validate<T>(T? value)
+    public static IResult<T> Validate<T>(T? value)
     {
-        return new Result<T?>(Validate(value, typeof(T)));
+        return new Result<T>(Validate(value, typeof(T)));
     }
 
-    public static IResult<object?> Validate(object? value, Type type)
+    public static IResult<object> Validate(object? value, Type type)
     {
         var schema = Get(type);
         return schema.Validate(value);
     }
 
-    public static AnySchema<object?> Get(object value)
+    public static AnySchema Get(object value)
     {
         return Get(value.GetType());
     }
 
-    public static AnySchema<T?> Get<T>()
+    public static AnySchema Get<T>()
     {
-        return Any<T?>().Merge(Get(typeof(T)));
+        return Get(typeof(T));
     }
 
-    public static AnySchema<object?> Get(Type type)
+    public static AnySchema Get(Type type)
     {
         if (!type.IsClass)
         {
@@ -52,7 +52,7 @@ public static partial class Schemas
         return schema;
     }
 
-    private static AnySchema<object?> GetProperty(PropertyInfo property)
+    private static AnySchema GetProperty(PropertyInfo property)
     {
         var schema = GetBaseByType(property.PropertyType);
         var attributes = property.GetCustomAttributes<SchemaAttribute>();
@@ -65,13 +65,13 @@ public static partial class Schemas
         return schema;
     }
 
-    private static AnySchema<object?> GetBaseByType(Type type)
+    private static AnySchema GetBaseByType(Type type)
     {
-        if (type == typeof(string)) return String().ToAny();
-        if (type == typeof(bool)) return Bool().ToAny();
-        if (type == typeof(double)) return Double().ToAny();
-        if (type == typeof(int)) return Int().ToAny();
-        if (type.IsArray) return Array().ToAny();
-        return Object().ToAny();
+        if (type == typeof(string)) return String();
+        if (type == typeof(bool)) return Bool();
+        if (type == typeof(double)) return Double();
+        if (type == typeof(int)) return Int();
+        if (type.IsArray) return Array();
+        return Object();
     }
 }
