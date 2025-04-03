@@ -67,11 +67,11 @@ public static partial class Schemas
 
     private static AnySchema<object?> GetBaseByType(Type type)
     {
-        if (type == typeof(string)) return String();
-        if (type == typeof(bool)) return Bool();
-        if (type == typeof(double)) return Double();
-        if (type == typeof(int)) return Int();
-        if (type.IsArray) return Array();
-        return Object();
+        if (type == typeof(string)) return String().ToAny();
+        if (type == typeof(bool)) return Bool().ToAny();
+        if (type == typeof(double)) return Double().ToAny();
+        if (type == typeof(int)) return Int().ToAny();
+        if (type.IsArray) return Array().ToAny();
+        return Object().ToAny();
     }
 }
