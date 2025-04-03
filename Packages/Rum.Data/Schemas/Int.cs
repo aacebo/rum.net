@@ -33,7 +33,7 @@ public class IntSchema : AnySchema
     public override IntSchema Required() => (IntSchema)base.Required();
     public override IntSchema Merge(AnySchema schema) => (IntSchema)base.Merge(schema);
 
-    public IntSchema Enum(params int[] options) => (IntSchema)base.Enum(options);
+    public IntSchema Enum(params int[] options) => Rule(new Rules.Enum<int>(options));
     public IntSchema Default(int defaultValue) => (IntSchema)base.Default(defaultValue);
     public IntSchema Transform(Func<int?, int?> transform) => (IntSchema)base.Transform(transform);
     public IntSchema Min(int min) => Rule(new Rules.Int.Min(min));
@@ -43,4 +43,6 @@ public class IntSchema : AnySchema
     public IntSchema Negative() => Rule(new Rules.Int.Max(-1));
     public IntSchema Even() => Rule(new Rules.Int.Even());
     public IntSchema Odd() => Rule(new Rules.Int.Odd());
+
+    public IResult<int?> Validate(int? value) => new Result<int?>(base.Validate(value));
 }

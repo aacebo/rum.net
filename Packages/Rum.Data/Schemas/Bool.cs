@@ -33,7 +33,9 @@ public class BoolSchema : AnySchema
     public override BoolSchema Required() => (BoolSchema)base.Required();
     public override BoolSchema Merge(AnySchema schema) => (BoolSchema)base.Merge(schema);
 
-    public BoolSchema Enum(params bool[] options) => (BoolSchema)base.Enum(options);
+    public BoolSchema Enum(params bool[] options) => Rule(new Rules.Enum<bool>(options));
     public BoolSchema Default(bool defaultValue) => (BoolSchema)base.Default(defaultValue);
     public BoolSchema Transform(Func<bool?, bool?> transform) => (BoolSchema)base.Transform(transform);
+
+    public IResult<bool?> Validate(bool? value) => new Result<bool?>(base.Validate(value));
 }

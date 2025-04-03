@@ -55,7 +55,7 @@ public class Result<T> : IResult<T>
     public Result() { }
     public Result(T? value) => Value = value;
     public Result(IError error) => Error = error;
-    public Result(IResult<object?> result)
+    public Result(IResult<object> result)
     {
         Error = result.Error;
         Value = (T?)result.Value;

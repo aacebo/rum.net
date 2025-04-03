@@ -22,7 +22,7 @@ public class BoolSchemaTests(ITestOutputHelper output)
         }
 
         Assert.Null(res.Error);
-        Assert.Equal(true, res.Value);
+        Assert.True(res.Value);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class BoolSchemaTests(ITestOutputHelper output)
         }
 
         Assert.Null(res.Error);
-        Assert.Equal(false, res.Value);
+        Assert.False(res.Value);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class BoolSchemaTests(ITestOutputHelper output)
         }
 
         Assert.Null(res.Error);
-        Assert.Equal(false, res.Value);
+        Assert.False(res.Value);
     }
 
     [Fact]
@@ -92,6 +92,6 @@ public class BoolSchemaTests(ITestOutputHelper output)
         }
 
         Assert.Null(res.Error);
-        Assert.Equal(false, res.Value);
+        Assert.False(res.Value);
     }
 }

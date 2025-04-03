@@ -6,6 +6,6 @@ public class User
 {
     [Required]
     [Default("test")]
-    [Enum(1, "test")]
+    [Enum([1, "test"])]
     public string? Username { get; set; }
 }

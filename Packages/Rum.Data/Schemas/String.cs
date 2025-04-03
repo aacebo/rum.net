@@ -46,4 +46,6 @@ public class StringSchema : AnySchema
     public StringSchema Email() => Rule(new Rules.String.Email());
     public StringSchema Guid() => Rule(new Rules.String.Guid());
     public StringSchema Url() => Rule(new Rules.String.Url());
+
+    public IResult<string?> Validate(string? value) => new Result<string?>(base.Validate(value));
 }

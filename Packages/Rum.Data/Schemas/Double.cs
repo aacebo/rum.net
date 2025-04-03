@@ -36,11 +36,13 @@ public class DoubleSchema : AnySchema
     public override DoubleSchema Required() => (DoubleSchema)base.Required();
     public override DoubleSchema Merge(AnySchema schema) => (DoubleSchema)base.Merge(schema);
 
-    public DoubleSchema Enum(params double[] options) => (DoubleSchema)base.Enum(options);
+    public DoubleSchema Enum(params double[] options) => Rule(new Rules.Enum<double>(options));
     public DoubleSchema Default(double defaultValue) => (DoubleSchema)base.Default(defaultValue);
     public DoubleSchema Transform(Func<double?, double?> transform) => (DoubleSchema)base.Transform(transform);
     public DoubleSchema Min(double min) => Rule(new Rules.Double.Min(min));
     public DoubleSchema Max(double max) => Rule(new Rules.Double.Max(max));
     public DoubleSchema Positive() => Rule(new Rules.Double.Min(0));
     public DoubleSchema Negative() => Rule(new Rules.Double.Max(-1));
+
+    public IResult<double?> Validate(double? value) => new Result<double?>(base.Validate(value));
 }
