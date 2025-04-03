@@ -37,6 +37,7 @@ public class DoubleSchema : AnySchema<double?>, ISchema<double?>
     public override DoubleSchema Enum(params double?[] options) => (DoubleSchema)base.Enum(options);
     public override DoubleSchema Default(double? defaultValue) => (DoubleSchema)base.Default(defaultValue);
     public override DoubleSchema Transform(Func<double?, double?> transform) => (DoubleSchema)base.Transform(transform);
+    public override DoubleSchema Merge<R>(AnySchema<R> schema) => (DoubleSchema)base.Merge(schema);
 
     public DoubleSchema Min(double min) => Rule(new Rules.Double.Min(min));
     public DoubleSchema Max(double max) => Rule(new Rules.Double.Max(max));

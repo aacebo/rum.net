@@ -25,6 +25,7 @@ public class NotSchema(params IRule[] rules) : AnySchema<object?>(), ISchema<obj
     public override NotSchema Required() => (NotSchema)base.Required();
     public override NotSchema Default(object? defaultValue) => (NotSchema)base.Default(defaultValue);
     public override NotSchema Transform(Func<object?, object?> transform) => (NotSchema)base.Transform(transform);
+    public override NotSchema Merge<R>(AnySchema<R> schema) => (NotSchema)base.Merge(schema);
     public override IResult<object?> Validate(object? value)
     {
         var res = base.Validate(value);

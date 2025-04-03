@@ -7,13 +7,18 @@ public static partial class Schemas
     /// <summary>
     /// Any Schema
     /// </summary>
-    public static AnySchema Any() => new();
+    public static AnySchema<object?> Any() => new();
+
+    /// <summary>
+    /// Any Schema
+    /// </summary>
+    public static AnySchema<T> Any<T>() => new();
 }
 
 /// <summary>
 /// Any Schema
 /// </summary>
-public class AnySchema : AnySchema<object>, ISchema<object?>;
+public class AnySchema : AnySchema<object?>, ISchema<object?>;
 
 /// <summary>
 /// Any Schema
@@ -22,7 +27,7 @@ public class AnySchema<T> : ISchema<T?>
 {
     public virtual string Name => "any";
 
-    protected List<IRule> Rules { get; set; } = [];
+    protected HashSet<IRule> Rules { get; set; } = [];
     protected string? _message;
 
     public virtual AnySchema<T> Rule(IRule rule)
@@ -62,6 +67,26 @@ public class AnySchema<T> : ISchema<T?>
         return Rule(new Rules.Transform<T>(transform));
     }
 
+    public virtual AnySchema<T> Merge<R>(AnySchema<R> schema)
+    {
+        foreach (var rule in schema.Rules)
+        {
+            Rules.Add(rule);
+        }
+
+        return this;
+    }
+
+    public virtual AnySchema ToAny()
+    {
+        return (AnySchema)new AnySchema().Merge(this);
+    }
+
+    public virtual AnySchema<R> ToAny<R>()
+    {
+        return new AnySchema<R>().Merge(this);
+    }
+
     public virtual IResult<T?> Validate(object? value)
     {
         var errors = new ErrorGroup(_message);
@@ -93,4 +118,15 @@ public class AnySchema<T> : ISchema<T?>
 
         return Result<object?>.Ok(res.Value);
     }
+
+    public static implicit operator AnySchema<T>(AnySchema schema) => schema;
+    public static implicit operator AnySchema<T>(StringSchema schema) => schema;
+    public static implicit operator AnySchema<T>(AndSchema schema) => schema;
+    public static implicit operator AnySchema<T>(ArraySchema<object?> schema) => schema;
+    public static implicit operator AnySchema<T>(BoolSchema schema) => schema;
+    public static implicit operator AnySchema<T>(DoubleSchema schema) => schema;
+    public static implicit operator AnySchema<T>(IntSchema schema) => schema;
+    public static implicit operator AnySchema<T>(NotSchema schema) => schema;
+    public static implicit operator AnySchema<T>(ObjectSchema schema) => schema;
+    public static implicit operator AnySchema<T>(OrSchema schema) => schema;
 }

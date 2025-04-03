@@ -34,6 +34,7 @@ public class IntSchema : AnySchema<int?>, ISchema<int?>
     public override IntSchema Enum(params int?[] options) => (IntSchema)base.Enum(options);
     public override IntSchema Default(int? defaultValue) => (IntSchema)base.Default(defaultValue);
     public override IntSchema Transform(Func<int?, int?> transform) => (IntSchema)base.Transform(transform);
+    public override IntSchema Merge<R>(AnySchema<R> schema) => (IntSchema)base.Merge(schema);
 
     public IntSchema Min(int min) => Rule(new Rules.Int.Min(min));
     public IntSchema Max(int max) => Rule(new Rules.Int.Max(max));

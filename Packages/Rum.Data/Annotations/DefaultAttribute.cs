@@ -5,10 +5,12 @@ namespace Rum.Data.Annotations;
     Inherited = true,
     AllowMultiple = true
 )]
-public class RequiredAttribute() : SchemaAttribute
+public class DefaultAttribute(object? value = null) : SchemaAttribute
 {
+    public object? Value { get; private set; } = value;
+
     public override AnySchema<object?> Apply(AnySchema<object?> schema)
     {
-        return schema.Required();
+        return schema.Default(Value);
     }
 }

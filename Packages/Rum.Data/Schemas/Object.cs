@@ -16,7 +16,7 @@ public static partial class Schemas
 /// <summary>
 /// Schema used to validate objects
 /// </summary>
-public class ObjectSchema : AnySchema<object?>, ISchema<object?>
+public class ObjectSchema : AnySchema, ISchema<object?>
 {
     public override string Name => "object";
 
@@ -33,6 +33,7 @@ public class ObjectSchema : AnySchema<object?>, ISchema<object?>
     public override ObjectSchema Required() => (ObjectSchema)base.Required();
     public override ObjectSchema Default(object? defaultValue) => (ObjectSchema)base.Default(defaultValue);
     public override ObjectSchema Transform(Func<object?, object?> transform) => (ObjectSchema)base.Transform(transform);
+    public override ObjectSchema Merge<R>(AnySchema<R> schema) => (ObjectSchema)base.Merge(schema);
 
     public ObjectSchema Property(string name, IRule rule)
     {
@@ -43,7 +44,7 @@ public class ObjectSchema : AnySchema<object?>, ISchema<object?>
     public ObjectSchema Extend(ObjectSchema schema)
     {
         // add rules that don't already exist
-        Rules.AddRange(schema.Rules.Where(r => Rules.Any(rule => rule.Name == r.Name) == false));
+        base.Merge(schema);
 
         foreach (var (key, rule) in schema.Properties)
         {
