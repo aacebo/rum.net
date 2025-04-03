@@ -1,7 +1,7 @@
 namespace Rum.Data.Annotations;
 
 [AttributeUsage(
-    AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Property,
+    AttributeTargets.Property | AttributeTargets.Field,
     Inherited = true,
     AllowMultiple = true
 )]
