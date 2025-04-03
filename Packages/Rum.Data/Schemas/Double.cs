@@ -17,7 +17,7 @@ public class DoubleSchema : AnySchema
 {
     public override string Name => "double";
 
-    public DoubleSchema() : base()
+    public DoubleSchema(AnySchema? schema = null) : base(schema)
     {
         Rule(new Rule("double", value =>
         {

@@ -17,7 +17,7 @@ public class BoolSchema : AnySchema
 {
     public override string Name => "bool";
 
-    public BoolSchema() : base()
+    public BoolSchema(AnySchema? schema = null) : base(schema)
     {
         Rule(new Rule("bool", value =>
         {
