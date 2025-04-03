@@ -2,11 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace Rum.Data.Annotations.String;
 
-[AttributeUsage(
-    AttributeTargets.Property | AttributeTargets.Field,
-    Inherited = true,
-    AllowMultiple = true
-)]
 public class PatternAttribute : SchemaAttribute
 {
     public Regex Value { get; private set; }

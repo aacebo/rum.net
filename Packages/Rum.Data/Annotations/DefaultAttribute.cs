@@ -1,10 +1,5 @@
 namespace Rum.Data.Annotations;
 
-[AttributeUsage(
-    AttributeTargets.Property | AttributeTargets.Field,
-    Inherited = true,
-    AllowMultiple = true
-)]
 public class DefaultAttribute(object Value, string? Message = null) : SchemaAttribute(Message)
 {
     public object Value { get; private set; } = Value;

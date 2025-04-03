@@ -1,10 +1,5 @@
 namespace Rum.Data.Annotations;
 
-[AttributeUsage(
-    AttributeTargets.Property | AttributeTargets.Field,
-    Inherited = true,
-    AllowMultiple = true
-)]
 public class EnumAttribute(object[]? Options = null, string? Message = null) : SchemaAttribute(Message)
 {
     public object[] Options { get; private set; } = Options ?? [];
