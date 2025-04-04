@@ -10,5 +10,5 @@ test:
 clean:
 	dotnet clean
 
-samples_aspnetcore_run:
-	dotnet run --project Samples/Samples.AspNetCore
+mcp_broker_run:
+	dotnet run --project Services/Mcp.Broker

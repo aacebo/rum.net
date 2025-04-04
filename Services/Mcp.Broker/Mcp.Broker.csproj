@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Packages\Rum.Core\Rum.Core.csproj" />
+    <ProjectReference Include="..\..\Packages\Rum.Logging\Rum.Logging.csproj" />
+    <ProjectReference Include="..\..\Packages\Rum.Data\Rum.Data.csproj" />
+    <ProjectReference Include="..\..\Packages\Rum.Data.Serialization.Sql\Rum.Data.Serialization.Sql.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
