@@ -7,6 +7,10 @@
     <ProjectReference Include="..\..\Packages\Rum.Data.Serialization.Sql\Rum.Data.Serialization.Sql.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="9.0.3" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
