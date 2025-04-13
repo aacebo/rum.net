@@ -3,6 +3,7 @@ using Rum.Data.Annotations;
 using Option = Rum.Cmd.Annotations.Option;
 
 using Xunit.Abstractions;
+using Rum.Data;
 
 namespace Rum.Cmd.Tests;
 

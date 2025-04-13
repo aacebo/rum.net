@@ -6,5 +6,5 @@ namespace Rum.Cmd.Annotations;
 )]
 public abstract class CmdAttribute : Attribute
 {
-    public abstract 
+
 }
