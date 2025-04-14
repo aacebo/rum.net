@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 using SqlKata;
+using String = Rum.Data.Annotations.String;
 
 namespace Rum.Agents.Broker.Models;
 
@@ -51,6 +51,7 @@ public class Agent
     {
         [JsonPropertyName("version")]
         [JsonPropertyOrder(0)]
+        [String.Semver]
         public string Version { get; set; } = "0.0.0";
 
         [JsonPropertyName("name")]
@@ -63,12 +64,12 @@ public class Agent
 
         [JsonPropertyName("url")]
         [JsonPropertyOrder(3)]
-        [Url]
+        [String.Url]
         public required string Url { get; set; }
 
         [JsonPropertyName("documentation_url")]
         [JsonPropertyOrder(4)]
-        [Url]
+        [String.Url]
         public string? DocumentationUrl { get; set; }
     }
 }

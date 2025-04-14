@@ -27,13 +27,20 @@ public class AgentController : ControllerBase
     public async Task<IResult> GetByName(string name, CancellationToken cancellationToken = default)
     {
         var agent = await _storage.GetByName(name, cancellationToken);
-        return Results.Ok(agent);
+        return agent == null ? Results.NotFound() : Results.Ok(agent);
     }
 
     [HttpPost]
     public async Task<IResult> Create([FromBody] Agent.CreateRequest request, CancellationToken cancellationToken = default)
     {
-        var agent = await _storage.Create(new()
+        var agent = await _storage.GetByName(request.Name);
+
+        if (agent != null)
+        {
+            return Results.Conflict("duplicate agent name");
+        }
+
+        agent = await _storage.Create(new()
         {
             Name = request.Name,
             Version = request.Version,
@@ -42,6 +49,6 @@ public class AgentController : ControllerBase
             DocumentationUrl = request.DocumentationUrl
         }, cancellationToken);
 
-        return Results.Ok(agent);
+        return Results.Created($"/agents/{agent.Name}", agent);
     }
 }
