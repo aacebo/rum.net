@@ -1,12 +1,15 @@
+using System.Reflection;
+
 namespace Rum.Cmd.Annotations.Command;
 
-[AttributeUsage(
-    AttributeTargets.Class | AttributeTargets.Struct,
-    Inherited = true
-)]
-public class AliasesAttribute(params string[] aliases) : Attribute
+public class AliasesAttribute(params string[] aliases) : CommandBuilderAttribute
 {
     public IList<string> Aliases { get; } = aliases;
 
-    public bool Select(string key) => Aliases.Any(a => a == key);
+    public override bool Select(string key) => Aliases.Any(a => a == key);
+    public override Rum.Cmd.Command.Builder Apply(Rum.Cmd.Command.Builder builder, PropertyInfo property)
+    {
+        builder = builder.Aliases([.. Aliases]);
+        return builder;
+    }
 }

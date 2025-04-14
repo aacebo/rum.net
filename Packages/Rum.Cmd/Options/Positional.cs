@@ -44,7 +44,7 @@ public class Positional : IPositionalOption
 
     public IResult<object> Parse(string? arg)
     {
-        throw new NotImplementedException();
+        return Type.Validate(arg);
     }
 
     public class Builder : IBuilder<Positional>

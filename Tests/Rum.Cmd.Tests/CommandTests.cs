@@ -3,7 +3,6 @@ using Rum.Data.Annotations;
 using Option = Rum.Cmd.Annotations.Option;
 
 using Xunit.Abstractions;
-using Rum.Data;
 
 namespace Rum.Cmd.Tests;
 
@@ -12,23 +11,32 @@ public class CommandTests(ITestOutputHelper output)
     [Command("basic")]
     public class BasicCommand
     {
-        [Positional]
+        [Option("message")]
+        [Option.Aliases("m")]
         [Required]
-        public string Message { get; set; } = string.Empty;
+        public string? Message { get; set; }
 
         [Option("verbose")]
         [Option.Aliases("v")]
-        [Default(false)]
+        [Default(true)]
         public bool Verbose { get; set; } = false;
     }
 
     [Fact]
     public void And_ShouldError()
     {
-        var schema = Schemas.And(Schemas.String().Min(3), Schemas.String().Max(3));
-        var res = schema.Validate("ab");
-        Assert.NotNull(res.Error);
-        res = schema.Validate("abcd");
+        var command = Command.From<BasicCommand>().Run<BasicCommand>(cmd => Task.Run(() =>
+        {
+            output.WriteLine(cmd.ToString());
+        })).Build();
+
+        var res = command.Run<BasicCommand>("-v");
+
+        if (res.Value != null)
+        {
+            output.WriteLine(res.Value.Verbose.ToString());
+        }
+
         Assert.NotNull(res.Error);
     }
 }

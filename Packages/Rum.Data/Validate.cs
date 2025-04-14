@@ -35,18 +35,23 @@ public static partial class Schemas
 
     public static AnySchema Get(Type type)
     {
-        if (!type.IsClass)
+        var schema = GetBaseByType(type);
+        var attributes = type.GetCustomAttributes<SchemaAttribute>();
+
+        foreach (var attr in attributes)
         {
-            throw new InvalidOperationException("only classes can be validated using annotations");
+            schema = attr.Apply(schema);
         }
 
-        var schema = Object();
-        var properties = type.GetProperties().Where(p => p.CanRead && p.CanWrite);
-
-        foreach (var property in properties)
+        if (schema is ObjectSchema objectSchema)
         {
-            var rule = GetProperty(property);
-            schema = schema.Property(property.Name, rule);
+            var properties = type.GetProperties().Where(p => p.CanRead && p.CanWrite);
+
+            foreach (var property in properties)
+            {
+                var rule = GetProperty(property);
+                objectSchema = objectSchema.Property(property.Name, rule);
+            }
         }
 
         return schema;

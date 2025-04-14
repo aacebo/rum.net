@@ -86,20 +86,28 @@ public class Command : ICommand
         Commands = new Dictionary<string, ICommand>();
     }
 
-    public static Command Create<T>(Func<T, Task> run)
+    public static Builder From(Type type)
     {
-        var type = typeof(T);
         var properties = type.GetProperties().Where(p => p.CanRead && p.CanWrite);
         var attribute = type.GetCustomAttribute<CommandAttribute>() ?? throw new Exception($"type '{type.Name}' must use the 'CommandAttribute'");
-        var aliasesAttribute = type.GetCustomAttribute<Annotations.Command.AliasesAttribute>();
-        var builder = Cmd.Command(attribute.Name ?? type.Name).Run(run);
+        var builder = Cmd.Command(attribute.Name ?? type.Name);
 
         foreach (var property in properties)
         {
-            
+            var attributes = property.GetCustomAttributes<CommandBuilderAttribute>();
+
+            foreach (var attr in attributes)
+            {
+                builder = attr.Apply(builder, property);
+            }
         }
 
-        return builder.Build();
+        return builder;
+    }
+
+    public static Builder From<T>()
+    {
+        return From(typeof(T));
     }
 
     public bool Select(string nameOrAlias)
