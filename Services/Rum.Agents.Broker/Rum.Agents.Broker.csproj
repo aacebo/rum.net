@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Packages\Rum.Core\Rum.Core.csproj" />
+    <ProjectReference Include="..\..\Packages\Rum.Data\Rum.Data.csproj" />
+    <ProjectReference Include="..\..\Packages\Rum.Logging\Rum.Logging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentMigrator" Version="7.1.0" />
+    <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="7.1.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="7.1.0" />
+    <PackageReference Include="FluentMigrator.Runner.Postgres" Version="7.1.0" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
+    <PackageReference Include="SqlKata" Version="4.0.1" />
+    <PackageReference Include="SqlKata.Execution" Version="4.0.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

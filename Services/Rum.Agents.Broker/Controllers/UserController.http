@@ -1,0 +1,10 @@
+POST http://localhost:5182/users
+content-type: application/json
+
+{
+    "name": "a test user"
+}
+
+###
+
+GET http://localhost:5182/users
