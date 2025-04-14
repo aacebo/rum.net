@@ -1,0 +1,15 @@
+POST http://localhost:5182/agents
+content-type: application/json
+
+{
+    "name": "007",
+    "url": "http://localhost:3000"
+}
+
+###
+
+GET http://localhost:5182/agents
+
+###
+
+GET http://localhost:5182/agents/007

@@ -6,7 +6,7 @@ public static partial class HostApplicationBuilderExtensions
 {
     public static IHostApplicationBuilder AddStorage(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<IUserStorage, UserStorage>();
+        builder.Services.AddSingleton<IAgentStorage, AgentStorage>();
         return builder;
     }
 }
