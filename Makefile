@@ -12,3 +12,6 @@ clean:
 
 agents_broker_run:
 	dotnet run --project Services/Rum.Agents.Broker
+
+agents_cli_run:
+	dotnet run --project Services/Rum.Agents.Cli
