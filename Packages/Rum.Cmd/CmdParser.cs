@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Text;
+
+using Rum.Text;
 
 namespace Rum.Cmd;
 
-public static class CmdParser
+public static partial class CmdParser
 {
     public static IDictionary<string, string?> Parse(params string[] args)
     {
@@ -38,52 +41,58 @@ public static class CmdParser
         var name = args[0];
         args = args.Skip(1).ToArray();
 
-        var cmd = new T();
-        var type = typeof(T);
-        var attr = type.GetCustomAttribute<CommandAttribute>() ?? throw new Exception($"type '{type.Name}' is not a command");
-
-        if (!attr.Select(name))
+        try
         {
-            throw new Exception($"received command '{name}' expected '{attr.Name ?? type.Name}'");
-        }
+            var cmd = new T();
+            var type = typeof(T);
+            var attr = type.GetCustomAttribute<CommandAttribute>() ?? throw new Exception($"type '{type.Name}' is not a command");
 
-        if (args.Length == 0) return;
+            if (!attr.Select(name))
+            {
+                throw new Exception($"received command '{name}' expected '{attr.Name ?? type.Name}'");
+            }
 
-        var values = Parse(args);
-        var properties = type.GetProperties().Where(p => p.CanRead && p.CanWrite);
+            var values = Parse(args);
+            var properties = type.GetProperties().Where(p => p.CanRead && p.CanWrite);
 
-        foreach (var property in properties)
-        {
-            var command = property.GetCustomAttribute<CommandAttribute>();
-
-            if (command == null || !command.Select(args[0])) continue;
-
-            var method = typeof(CmdParser)
-                .GetMethods()
-                .Where(m => m.IsGenericMethod && m.Name == "Parse")
-                .FirstOrDefault();
-
-            method = method?.MakeGenericMethod(property.PropertyType);
-            method?.Invoke(null, [args]);
-            return;
-        }
-
-        foreach (var (key, value) in values)
-        {
             foreach (var property in properties)
             {
-                var option = property.GetCustomAttribute<OptionAttribute>();
+                var command = property.GetCustomAttribute<CommandAttribute>();
 
-                if (option == null || !option.Select(key)) continue;
+                if (command == null || args.Length == 0 || !command.Select(args[0])) continue;
 
-                var parsed = option.Parse(property.PropertyType, value);
-                property.SetValue(cmd, parsed);
+                var method = typeof(CmdParser)
+                    .GetMethods()
+                    .Where(m => m.IsGenericMethod && m.Name == "Parse")
+                    .FirstOrDefault();
+
+                method = method?.MakeGenericMethod(property.PropertyType);
+                method?.Invoke(null, [args]);
+                return;
             }
-        }
 
-        var context = new ValidationContext(cmd);
-        Validator.ValidateObject(cmd, context);
-        cmd.Execute();
+            foreach (var (key, value) in values)
+            {
+                foreach (var property in properties)
+                {
+                    var option = property.GetCustomAttribute<OptionAttribute>();
+
+                    if (option == null || !option.Select(key)) continue;
+
+                    var parsed = option.Parse(property.PropertyType, value);
+                    property.SetValue(cmd, parsed);
+                }
+            }
+
+            var context = new ValidationContext(cmd);
+            Validator.ValidateObject(cmd, context);
+            cmd.Execute();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.Write(GetHelp<T>());
+            Console.Error.WriteLine(new StringBuilder().Red(new StringBuilder().Bold(ex.Message).ToString()));
+        }
     }
 
     private static (string, string?) ParseKeyValue(string arg)

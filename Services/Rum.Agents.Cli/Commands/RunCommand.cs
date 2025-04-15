@@ -9,7 +9,14 @@ public class RunCommand : ICommand
 {
     [Positional]
     [Required]
-    public string Name { get; set; } = string.Empty;
+    [MinLength(1)]
+    public string? Name { get; set; }
+
+    [Option("verbose", Aliases = ["v"])]
+    public bool Verbose { get; set; } = false;
+
+    [Option("test", Aliases = ["t"])]
+    public bool Test { get; set; } = false;
 
     public void Execute()
     {

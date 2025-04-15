@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace Rum.Cmd;
@@ -11,6 +12,10 @@ public class CommandAttribute(string? Name = null) : Attribute
     [JsonPropertyName("name")]
     [JsonPropertyOrder(0)]
     public string? Name { get; set; } = Name;
+
+    [JsonPropertyName("version")]
+    [JsonPropertyOrder(1)]
+    public string? Version { get; set; } = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
 
     [JsonPropertyName("aliases")]
     [JsonPropertyOrder(1)]
