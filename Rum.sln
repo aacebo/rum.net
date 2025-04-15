@@ -5,21 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{809F86A1-1C4C-B159-0CD4-DF9D33D876CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Data", "Packages\Rum.Data\Rum.Data.csproj", "{3CBD7F6A-EA47-4FFA-B2C4-00285D037E49}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Logging", "Packages\Rum.Logging\Rum.Logging.csproj", "{CCBC783E-32B9-4C7E-9744-7229565DD651}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Core", "Packages\Rum.Core\Rum.Core.csproj", "{9BD2B451-62F6-42DD-AC25-4894D004C3EA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Data.Tests", "Tests\Rum.Data.Tests\Rum.Data.Tests.csproj", "{B248FA89-FD0A-4D8E-9BC3-7E12D708C677}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Data.Serialization.Sql", "Packages\Rum.Data.Serialization.Sql\Rum.Data.Serialization.Sql.csproj", "{968E147C-D15F-476C-8AF9-51ED0C5353D0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Cmd", "Packages\Rum.Cmd\Rum.Cmd.csproj", "{06440FA5-DFC5-4597-A748-6ABE9F550C72}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rum.Cmd.Tests", "Tests\Rum.Cmd.Tests\Rum.Cmd.Tests.csproj", "{5A359821-C319-4E5D-934D-73FDC9CC9295}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{5854FF58-B8C5-05C6-5BF2-ACE42193F22B}"
 EndProject

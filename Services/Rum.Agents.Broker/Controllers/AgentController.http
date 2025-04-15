@@ -2,8 +2,8 @@ POST http://localhost:5182/agents
 content-type: application/json
 
 {
-    "name": "009",
-    "url": "test"
+    "name": "007",
+    "url": "http://localhost:3000"
 }
 
 ###
