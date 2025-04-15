@@ -8,9 +8,9 @@ namespace Rum.Agents.Cli.Commands;
 public class RootCommand : ICommand
 {
     [Command("run")]
-    public RunCommand _Run { get; set; } = new();
+    public RunCommand Run { get; set; } = new();
 
-    public void Run()
+    public void Execute()
     {
         Console.WriteLine(JsonSerializer.Serialize(this, new JsonSerializerOptions()
         {

@@ -2,5 +2,5 @@ namespace Rum.Cmd;
 
 public interface ICommand
 {
-    public void Run();
+    public void Execute();
 }

@@ -1,0 +1,11 @@
+{
+    "name": "@rum/agents.cli",
+    "version": "0.0.0",
+    "files": ["bin", "index.js"],
+    "bin": {
+        "rum": "./index.js"
+    },
+    "scripts": {
+        "rum": "./index.js"
+    }
+}

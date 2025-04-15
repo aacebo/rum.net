@@ -11,7 +11,7 @@ public class RunCommand : ICommand
     [Required]
     public string Name { get; set; } = string.Empty;
 
-    public void Run()
+    public void Execute()
     {
         Console.WriteLine($"running task '{Name}'");
     }

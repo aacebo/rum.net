@@ -38,8 +38,6 @@ public static class CmdParser
         var name = args[0];
         args = args.Skip(1).ToArray();
 
-        if (args.Length == 0) return;
-
         var cmd = new T();
         var type = typeof(T);
         var attr = type.GetCustomAttribute<CommandAttribute>() ?? throw new Exception($"type '{type.Name}' is not a command");
@@ -48,6 +46,8 @@ public static class CmdParser
         {
             throw new Exception($"received command '{name}' expected '{attr.Name ?? type.Name}'");
         }
+
+        if (args.Length == 0) return;
 
         var values = Parse(args);
         var properties = type.GetProperties().Where(p => p.CanRead && p.CanWrite);
@@ -83,7 +83,7 @@ public static class CmdParser
 
         var context = new ValidationContext(cmd);
         Validator.ValidateObject(cmd, context);
-        cmd.Run();
+        cmd.Execute();
     }
 
     private static (string, string?) ParseKeyValue(string arg)
