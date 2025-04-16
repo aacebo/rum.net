@@ -33,7 +33,7 @@ public class AgentController : ControllerBase
     [HttpPost]
     public async Task<IResult> Create([FromBody] Agent.CreateRequest request, CancellationToken cancellationToken = default)
     {
-        var agent = await _storage.GetByName(request.Name);
+        var agent = await _storage.GetByName(request.Name, cancellationToken);
 
         if (agent != null)
         {
@@ -46,6 +46,7 @@ public class AgentController : ControllerBase
             Version = request.Version,
             Description = request.Description,
             Url = request.Url,
+            Dialects = request.Dialects,
             DocumentationUrl = request.DocumentationUrl
         }, cancellationToken);
 

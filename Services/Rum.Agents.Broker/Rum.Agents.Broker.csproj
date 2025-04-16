@@ -10,6 +10,10 @@
     <PackageReference Include="SqlKata.Execution" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Packages\Rum.Text\Rum.Text.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>

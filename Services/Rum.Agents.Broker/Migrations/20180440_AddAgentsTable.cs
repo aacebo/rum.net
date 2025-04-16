@@ -13,6 +13,7 @@ public class AddAgentsTable : Migration
             .WithColumn("name").AsString().Unique().NotNullable()
             .WithColumn("description").AsString().Nullable()
             .WithColumn("url").AsString().NotNullable()
+            .WithColumn("dialects").AsCustom("TEXT[]").NotNullable()
             .WithColumn("documentation_url").AsString().Nullable()
             .WithColumn("created_at").AsDateTime().NotNullable().WithDefaultValue(RawSql.Insert("CURRENT_TIMESTAMP"))
             .WithColumn("updated_at").AsDateTime().NotNullable().WithDefaultValue(RawSql.Insert("CURRENT_TIMESTAMP"));
