@@ -64,9 +64,9 @@ public class Parser
         return (name.ToString(), query);
     }
 
-    private Arguments ParseArgs()
+    private ArgumentCollection ParseArgs()
     {
-        var args = new Arguments();
+        var args = new ArgumentCollection();
 
         while (Current.Type != TokenType.RightParen)
         {

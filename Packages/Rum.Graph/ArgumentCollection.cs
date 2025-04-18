@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Rum.Graph;
 
-public class Arguments : Dictionary<string, object?>
+public class ArgumentCollection : Dictionary<string, object?>
 {
     public bool Empty => Count == 0;
 

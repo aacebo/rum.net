@@ -3,14 +3,15 @@ using System.Text.Json.Serialization;
 
 namespace Rum.Graph;
 
-public class Fields : Dictionary<string, Query>
+public class MetaData : Dictionary<string, object>
 {
     public bool Empty => Count == 0;
 
     public bool Exists(string key) => ContainsKey(key);
-    public void Set(string key, Query value) => this[key] = value;
-    public Query Get(string key) => this[key];
-    public Query? GetOrDefault(string key) => TryGetValue(key, out var value) ? value : null;
+    public void Set(string key, object value) => this[key] = value;
+    public object? Get(string key) => this[key];
+    public T Get<T>(string key) => (T?)this[key] ?? throw new KeyNotFoundException();
+    public T? GetOrDefault<T>(string key) => (T?)Get(key);
 
     public override string ToString()
     {

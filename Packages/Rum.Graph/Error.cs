@@ -3,15 +3,19 @@ using System.Text.Json.Serialization;
 
 namespace Rum.Graph;
 
-public class Query
+public class Error
 {
-    [JsonPropertyName("args")]
+    [JsonPropertyName("key")]
     [JsonPropertyOrder(0)]
-    public ArgumentCollection Args { get; set; } = [];
+    public string? Key { get; set; }
 
-    [JsonPropertyName("fields")]
+    [JsonPropertyName("message")]
     [JsonPropertyOrder(1)]
-    public FieldCollection Fields { get; set; } = [];
+    public string? Message { get; set; }
+
+    [JsonPropertyName("errors")]
+    [JsonPropertyOrder(2)]
+    public IList<Error> Errors { get; set; } = [];
 
     public override string ToString()
     {
