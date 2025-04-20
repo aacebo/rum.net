@@ -32,23 +32,18 @@ public class Agent
     [Column("url")]
     public required string Url { get; set; }
 
-    [JsonPropertyName("dialects")]
-    [JsonPropertyOrder(5)]
-    [Column("dialects")]
-    public Dialect[] Dialects { get; set; } = [];
-
     [JsonPropertyName("documentation_url")]
-    [JsonPropertyOrder(6)]
+    [JsonPropertyOrder(5)]
     [Column("documentation_url")]
     public string? DocumentationUrl { get; set; }
 
     [JsonPropertyName("created_at")]
-    [JsonPropertyOrder(7)]
+    [JsonPropertyOrder(6)]
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     [JsonPropertyName("updated_at")]
-    [JsonPropertyOrder(8)]
+    [JsonPropertyOrder(7)]
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
@@ -71,12 +66,8 @@ public class Agent
         [Url]
         public required string Url { get; set; }
 
-        [JsonPropertyName("dialects")]
-        [JsonPropertyOrder(4)]
-        public Dialect[] Dialects { get; set; } = [];
-
         [JsonPropertyName("documentation_url")]
-        [JsonPropertyOrder(5)]
+        [JsonPropertyOrder(4)]
         [Url]
         public string? DocumentationUrl { get; set; }
     }

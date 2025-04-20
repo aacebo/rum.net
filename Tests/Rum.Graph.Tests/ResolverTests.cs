@@ -27,7 +27,7 @@ public class ResolverTests
 
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
-       
+
         var data = res.TryGetData<TestSchema>();
 
         Assert.NotNull(data);

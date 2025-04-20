@@ -46,7 +46,6 @@ public class AgentController : ControllerBase
             Version = request.Version,
             Description = request.Description,
             Url = request.Url,
-            Dialects = request.Dialects,
             DocumentationUrl = request.DocumentationUrl
         }, cancellationToken);
 

@@ -1,12 +1,12 @@
-using System.Text.Json.Serialization;
+using Rum.Text;
 
 namespace Rum.Agents.Broker.Models;
 
-public enum Dialect
+public class Dialect(string value) : StringEnum(value)
 {
-    [JsonStringEnumMemberName("a2a")]
-    A2A,
+    public static readonly Dialect Mcp = new("mcp");
+    public bool IsMcp => Value.Equals(Mcp);
 
-    [JsonStringEnumMemberName("mcp")]
-    Mcp,
+    public static readonly Dialect A2A = new("a2a");
+    public bool IsA2A => Value.Equals(A2A);
 }
