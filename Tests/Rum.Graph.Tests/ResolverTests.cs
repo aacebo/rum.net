@@ -46,7 +46,7 @@ public class ResolverTests
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
         Assert.IsType<User>(res.Data);
-        Assert.Null(((User)res.Data).Followers);
+        Assert.Null(res.GetData<User>().Followers);
 
         res = await resolver.Resolve(@"{
             id,
@@ -57,6 +57,6 @@ public class ResolverTests
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
         Assert.IsType<User>(res.Data);
-        Assert.Equal(17, ((User)res.Data).Followers);
+        Assert.Equal(17, res.GetData<User>().Followers);
     }
 }
