@@ -35,7 +35,7 @@ public class ResolverTests
     }
 
     [Fact]
-    public async Task Should_ResolveObject()
+    public async Task Should_Resolve()
     {
         var resolver = new UserResolver();
         var res = await resolver.Resolve(@"{
