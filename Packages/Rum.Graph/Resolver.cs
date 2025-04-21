@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
 using Rum.Graph.Parsing;
@@ -15,9 +17,11 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
 
     private readonly MethodResolver[] _methods;
     private readonly MemberInfo[] _members;
+    private readonly IServiceProvider _services;
 
-    public Resolver()
+    public Resolver(IServiceProvider? services = null)
     {
+        _services = services ?? new ServiceCollection().BuildServiceProvider();
         _methods = GetType()
             .GetMethods()
             .Where(method => method.GetCustomAttribute<FieldAttribute>() is not null)
@@ -73,6 +77,26 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
                 Parent = parent,
                 Key = key
             });
+
+            if (res.IsError) continue;
+            if (res.Data is not null)
+            {
+                var attribute = res.Data.GetType().GetCustomAttribute<ResolverBaseAttribute>();
+
+                if (attribute is not null)
+                {
+                    var resolver = (Resolver<object>?)_services.GetService(attribute.Type);
+
+                    if (resolver is not null)
+                    {
+                        res = await resolver.Resolve(new ObjectContext<object>()
+                        {
+                            Query = query,
+                            Parent = parent
+                        });
+                    }
+                }
+            }
 
             if (member is FieldInfo field)
             {
