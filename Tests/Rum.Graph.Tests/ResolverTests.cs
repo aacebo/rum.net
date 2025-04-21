@@ -1,20 +1,38 @@
+using System.Text.Json.Serialization;
+
 using Rum.Graph.Annotations;
 
 namespace Rum.Graph.Tests;
 
 public class ResolverTests
 {
-    [Schema]
-    public class TestSchema
+    public class UserResolver
     {
-        [Schema.Field("id")]
-        public string Id { get; set; } = "test";
-
-        [Schema.Field("name")]
-        public string GetName([Param] string id)
+        [Field("followers")]
+        public int Followers()
         {
-            return string.Empty;
+            return 17;
         }
+    }
+
+    [Resolver<UserResolver>]
+    public class User
+    {
+        [JsonPropertyName("id")]
+        [JsonPropertyOrder(0)]
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        [JsonPropertyName("name")]
+        [JsonPropertyOrder(1)]
+        public required string Name { get; set; }
+
+        [JsonPropertyName("followers")]
+        [JsonPropertyOrder(2)]
+        public int? Followers { get; set; }
+
+        [JsonPropertyName("created_at")]
+        [JsonPropertyOrder(3)]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 
     [Fact]

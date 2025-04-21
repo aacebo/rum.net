@@ -5,13 +5,13 @@ using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
-public class MemberResolver : IResolver
+public class MemberResolver : IResolver<object>
 {
     public string Name => _member.Name;
     public readonly MemberInfo Info;
 
     private readonly object? _object;
-    private readonly IResolver _member;
+    private readonly IResolver<object> _member;
 
     public MemberResolver(MemberInfo member, object? value = null)
     {
@@ -44,7 +44,7 @@ public class MemberResolver : IResolver
         return _member.Select(key);
     }
 
-    public async Task<Result> Resolve(IContext context)
+    public async Task<Result<object>> Resolve(IContext context)
     {
         var res = await _member.Resolve(context);
 

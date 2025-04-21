@@ -9,7 +9,7 @@ namespace Rum.Graph.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddResolver<T>(this IServiceCollection collection) where T : class
+    public static IServiceCollection AddResolver<TResolves, TResolver>(this IServiceCollection collection) where TResolves : class where TResolver : class
     {
         var attribute = typeof(T).GetCustomAttribute<ResolverBaseAttribute>();
 
@@ -18,7 +18,9 @@ public static class ServiceCollectionExtensions
             throw new InvalidOperationException();
         }
 
-        collection.AddSingleton(attribute.Type);
+        var resolver = new ObjectResolver();
+
+        collection.AddSingleton<IResolver<TResolves>>(attribute.Type);
         return collection;
     }
 }

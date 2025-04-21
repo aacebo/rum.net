@@ -4,7 +4,7 @@ using Rum.Graph.Annotations;
 
 namespace Rum.Graph.Resolvers;
 
-public class MethodResolver : IResolver
+public class MethodResolver : IResolver<object>
 {
     public string Name => _attribute.Name ?? Info.Name;
     public readonly MethodInfo Info;
@@ -26,7 +26,7 @@ public class MethodResolver : IResolver
         return Name == key;
     }
 
-    public async Task<Result> Resolve(IContext context)
+    public async Task<Result<object>> Resolve(IContext context)
     {
         try
         {

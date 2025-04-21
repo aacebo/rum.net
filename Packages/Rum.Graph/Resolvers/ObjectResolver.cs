@@ -5,7 +5,7 @@ using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
-public class ObjectResolver : IResolver
+public class ObjectResolver : IResolver<object>
 {
     public string Name => Info.Name;
     public readonly Type Info;
@@ -13,11 +13,11 @@ public class ObjectResolver : IResolver
     private readonly object? _object;
     private readonly MemberResolver[] _members;
 
-    public ObjectResolver(Type type, object? value = null)
+    public ObjectResolver(Type type, object? value = default)
     {
         Info = type;
         _object = value;
-        _members = type.GetMembers()
+        _members = Info.GetMembers()
             .Where(member => member.GetCustomAttribute<FieldAttribute>() is not null)
             .Select(member => new MemberResolver(member, value))
             .ToArray();
@@ -28,7 +28,7 @@ public class ObjectResolver : IResolver
         return Name == key;
     }
 
-    public async Task<Result> Resolve(IContext context)
+    public async Task<Result<object>> Resolve(IContext context)
     {
         foreach (var (key, query) in context.Query.Fields)
         {
