@@ -73,7 +73,7 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
                 Parent = parent,
                 Key = key
             });
-            
+
             if (member is FieldInfo field)
             {
                 field.SetValue(parent, res.Data);

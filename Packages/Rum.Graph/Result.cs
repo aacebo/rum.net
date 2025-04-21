@@ -33,7 +33,7 @@ public class Result
     public Result Merge(Result from)
     {
         Meta.Merge(from.Meta);
-        
+
         if (from.Data is not null)
         {
             Data = from.Data;
