@@ -13,6 +13,16 @@ public class MetaData : Dictionary<string, object>
     public T Get<T>(string key) => (T?)this[key] ?? throw new KeyNotFoundException();
     public T? GetOrDefault<T>(string key) => (T?)Get(key);
 
+    public MetaData Merge(MetaData from)
+    {
+        foreach (var (key, value) in from)
+        {
+            this[key] = value;
+        }
+
+        return this;
+    }
+
     public override string ToString()
     {
         return JsonSerializer.Serialize(this, new JsonSerializerOptions()

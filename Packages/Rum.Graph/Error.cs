@@ -17,6 +17,24 @@ public class Error
     [JsonPropertyOrder(2)]
     public IList<Error> Errors { get; set; } = [];
 
+    public Error Add(Error error)
+    {
+        Errors.Add(error);
+        return this;
+    }
+
+    public Error Add(string message)
+    {
+        var error = new Error() { Message = message };
+        return Add(error);
+    }
+
+    public Error Add(string key, string message)
+    {
+        var error = new Error() { Key = key, Message = message };
+        return Add(error);
+    }
+
     public override string ToString()
     {
         return JsonSerializer.Serialize(this, new JsonSerializerOptions()

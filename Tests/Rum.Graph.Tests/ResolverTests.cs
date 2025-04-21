@@ -6,16 +6,15 @@ namespace Rum.Graph.Tests;
 
 public class ResolverTests
 {
-    public class UserResolver
+    public class UserResolver : Resolver<User>
     {
         [Field("followers")]
-        public int Followers()
+        public int GetFollowers()
         {
             return 17;
         }
     }
 
-    [Resolver<UserResolver>]
     public class User
     {
         [JsonPropertyName("id")]
@@ -24,7 +23,7 @@ public class ResolverTests
 
         [JsonPropertyName("name")]
         [JsonPropertyOrder(1)]
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("followers")]
         [JsonPropertyOrder(2)]
@@ -38,16 +37,26 @@ public class ResolverTests
     [Fact]
     public async Task Should_ResolveObject()
     {
-        var res = await GraphResolver.Resolve<TestSchema>(@"{
+        var resolver = new UserResolver();
+        var res = await resolver.Resolve(@"{
             id,
             name
         }");
 
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
+        Assert.IsType<User>(res.Data);
+        Assert.Null(((User)res.Data).Followers);
 
-        var data = res.TryGetData<TestSchema>();
+        res = await resolver.Resolve(@"{
+            id,
+            name,
+            followers
+        }");
 
-        Assert.NotNull(data);
+        Assert.False(res.IsError);
+        Assert.NotNull(res.Data);
+        Assert.IsType<User>(res.Data);
+        Assert.Equal(17, ((User)res.Data).Followers);
     }
 }

@@ -8,5 +8,5 @@ namespace Rum.Graph.Annotations;
 )]
 public abstract class ContextAccessorAttribute : Attribute
 {
-    public abstract object? Resolve(IContext context, ParameterInfo parameter);
+    public abstract object? Resolve(IContext<object> context, ParameterInfo parameter);
 }

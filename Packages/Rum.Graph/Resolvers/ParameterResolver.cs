@@ -15,7 +15,7 @@ public class ParameterResolver
         _accessor = parameter.GetCustomAttribute<ContextAccessorAttribute>();
     }
 
-    public object? Resolve(IContext context)
+    public object? Resolve(IContext<object> context)
     {
         return _accessor is null ? context : _accessor.Resolve(context, _parameter);
     }

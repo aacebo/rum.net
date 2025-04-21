@@ -1,9 +1,9 @@
 namespace Rum.Graph;
 
-public interface IResolver<T> where T : notnull
+public interface IResolver : IResolver<object>;
+public interface IResolver<T>
 {
     public string Name { get; }
 
-    public bool Select(string key);
-    public Task<Result<T>> Resolve(IContext context);
+    public Task<Result> Resolve(IContext<T> context);
 }

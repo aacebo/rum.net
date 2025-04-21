@@ -1,9 +1,8 @@
 namespace Rum.Graph;
 
-public interface IContext : IDictionary<string, object?>
+public interface IContext : IContext<object>;
+public interface IContext<T> : IDictionary<string, object?>
 {
-    public IServiceProvider Services { get; }
     public Query Query { get; set; }
-    public object? Parent { get; set; }
-    public object? Value { get; set; }
+    public T? Parent { get; set; }
 }

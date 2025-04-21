@@ -1,9 +1,7 @@
 namespace Rum.Graph.Contexts;
 
-public class ObjectContext : Dictionary<string, object?>, IContext
+public class ObjectContext<T> : Dictionary<string, object?>, IContext<T>
 {
-    public required IServiceProvider Services { get; set; }
     public required Query Query { get; set; }
-    public object? Parent { get; set; }
-    public object? Value { get; set; }
+    public T? Parent { get; set; }
 }

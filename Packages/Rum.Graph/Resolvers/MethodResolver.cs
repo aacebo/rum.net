@@ -4,7 +4,7 @@ using Rum.Graph.Annotations;
 
 namespace Rum.Graph.Resolvers;
 
-public class MethodResolver : IResolver<object>
+public class MethodResolver : IResolver
 {
     public string Name => _attribute.Name ?? Info.Name;
     public readonly MethodInfo Info;
@@ -21,12 +21,7 @@ public class MethodResolver : IResolver<object>
         _attribute = method.GetCustomAttribute<FieldAttribute>() ?? throw new InvalidOperationException($"method '{method.Name}' isn't a Schema.Field");
     }
 
-    public bool Select(string key)
-    {
-        return Name == key;
-    }
-
-    public async Task<Result<object>> Resolve(IContext context)
+    public async Task<Result> Resolve(IContext<object> context)
     {
         try
         {
