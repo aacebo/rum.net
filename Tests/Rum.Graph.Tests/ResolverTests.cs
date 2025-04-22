@@ -9,7 +9,7 @@ public class ResolverTests
     public class UserResolver : Resolver<User>
     {
         [Field("followers")]
-        public int GetFollowers()
+        public int? GetFollowers()
         {
             return 17;
         }
