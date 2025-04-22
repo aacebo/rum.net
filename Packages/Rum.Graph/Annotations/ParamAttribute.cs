@@ -2,10 +2,13 @@ using System.Reflection;
 
 namespace Rum.Graph.Annotations;
 
-public class ParamAttribute : ContextAccessorAttribute
+public class ParamAttribute(string? name = null) : ContextAccessorAttribute
 {
+    public string? Name { get; } = name;
+
     public override object? Resolve(IContext<object> context, ParameterInfo parameter)
     {
-        return parameter.Name is null ? null : context.Query.Args.Get(parameter.Name);
+        var name = Name ?? parameter.Name;
+        return name is null ? null : context.Query.Args.Get(name);
     }
 }

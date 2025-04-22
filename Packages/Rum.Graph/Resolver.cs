@@ -71,7 +71,7 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
                 continue;
             }
 
-            var res = await method.Resolve(new FieldContext<T>()
+            var res = await method.Resolve(new FieldContext<object>()
             {
                 Query = query,
                 Parent = parent,
