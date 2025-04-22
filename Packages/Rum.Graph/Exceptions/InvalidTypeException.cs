@@ -2,7 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace Rum.Graph.Exceptions;
 
-public class InvalidTypeException<T> : Exception
+public class InvalidTypeException<T>(string? message = null) : InvalidTypeException(typeof(T), message)
+{
+}
+
+public class InvalidTypeException : Exception
 {
     [JsonPropertyName("rule")]
     [JsonPropertyOrder(0)]
@@ -12,8 +16,8 @@ public class InvalidTypeException<T> : Exception
     [JsonPropertyOrder(1)]
     public string Type { get; }
 
-    public InvalidTypeException(string? message = null) : base(message)
+    public InvalidTypeException(Type type, string? message = null) : base(message)
     {
-        Type = typeof(T).Name;
+        Type = type.Name;
     }
 }

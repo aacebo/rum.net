@@ -1,4 +1,3 @@
-
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -7,11 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
 using Rum.Graph.Parsing;
-using Rum.Graph.Resolvers;
 
-namespace Rum.Graph;
+namespace Rum.Graph.Resolvers;
 
-public class Resolver<T> : IResolver<T> where T : notnull, new()
+public class ObjectResolver<T> : IResolver<T> where T : notnull, new()
 {
     public string Name => typeof(T).Name;
 
@@ -19,7 +17,7 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
     private readonly MemberInfo[] _members;
     private readonly IServiceProvider _services;
 
-    public Resolver(IServiceProvider? services = null)
+    public ObjectResolver(IServiceProvider? services = null)
     {
         _services = services ?? new ServiceCollection().BuildServiceProvider();
         _methods = GetType()
@@ -37,7 +35,7 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
     public async Task<Result> Resolve(string qs, T? value = default)
     {
         var query = new Parser(qs).Parse();
-        return await Resolve(new ObjectContext<T>()
+        return await Resolve(new Context<T>()
         {
             Query = query,
             Parent = value
@@ -85,11 +83,11 @@ public class Resolver<T> : IResolver<T> where T : notnull, new()
 
                 if (attribute is not null)
                 {
-                    var resolver = (Resolver<object>?)_services.GetService(attribute.Type);
+                    var resolver = (IResolver<object>?)_services.GetService(attribute.Type);
 
                     if (resolver is not null)
                     {
-                        res = await resolver.Resolve(new ObjectContext<object>()
+                        res = await resolver.Resolve(new Context<object>()
                         {
                             Query = query,
                             Parent = parent
