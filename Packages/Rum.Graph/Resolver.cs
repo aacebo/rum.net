@@ -89,7 +89,18 @@ public class Resolver<T> : IResolver where T : notnull, new()
             });
 
             result.Meta.Merge(res.Meta);
-            if (res.IsError) continue;
+
+            if (res.IsError && res.Error is not null)
+            {
+                result.Error ??= new();
+                result.Error.Add(new Error()
+                {
+                    Key = key,
+                    Errors = [res.Error]
+                });
+
+                continue;
+            }
 
             if (res.Data is IEnumerable<object> list)
             {

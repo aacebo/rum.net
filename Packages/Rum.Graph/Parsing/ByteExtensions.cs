@@ -12,7 +12,7 @@ public static class ByteExtensions
         return (
             (value >= 'a' && value <= 'z') ||
             (value >= 'A' && value <= 'Z') ||
-            value == '_'
+            value == '_' || value == '$' || value == '@'
         );
     }
 }

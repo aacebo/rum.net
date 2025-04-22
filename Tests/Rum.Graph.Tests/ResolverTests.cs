@@ -38,7 +38,7 @@ public class ResolverTests
             id,
             name,
             followers,
-            addresses {state,zipcode,country}
+            addresses($filter: ""10"") {state,zipcode,country}
         }", new() { Name = "testuser" });
 
         if (res.IsError)

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Packages\Rum.Text\Rum.Text.csproj" />
+    <ProjectReference Include="..\..\Packages\Rum.Graph\Rum.Graph.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

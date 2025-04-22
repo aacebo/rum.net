@@ -17,8 +17,12 @@ public class Error
     [JsonPropertyOrder(2)]
     public IList<Error> Errors { get; set; } = [];
 
-    public Error Add(Error error)
+    [JsonIgnore]
+    public int Count => Errors.Count;
+
+    public Error Add(Error? error)
     {
+        if (error is null) return this;
         Errors.Add(error);
         return this;
     }

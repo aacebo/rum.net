@@ -29,8 +29,9 @@ public class UserResolver : Resolver<User>
     }
 
     [Field("addresses")]
-    public IList<Address> GetAddresses()
+    public IList<Address> GetAddresses([Param("$filter")] string? filter)
     {
+        Console.WriteLine(filter);
         return [
             new()
             {

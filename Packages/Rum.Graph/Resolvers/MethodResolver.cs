@@ -1,5 +1,7 @@
 using System.Reflection;
 
+using Rum.Graph.Contexts;
+
 namespace Rum.Graph.Resolvers;
 
 internal class MethodResolver : IResolver
@@ -17,10 +19,38 @@ internal class MethodResolver : IResolver
 
     public async Task<Result> Resolve(IContext context)
     {
+        var fieldContext = (FieldContext)context;
+
         try
         {
-            var paramters = _parameters.Select(p => p.Resolve(context)).ToArray();
-            var res = _method.Invoke(_object, paramters);
+            List<object?> parameters = [];
+            var errors = new Error() { Key = "args" };
+
+            foreach (var param in _parameters)
+            {
+                var result = param.Resolve(new ParamContext()
+                {
+                    Query = fieldContext.Query,
+                    Parent = fieldContext.Parent,
+                    Key = fieldContext.Key,
+                    Parameter = param.Parameter
+                });
+
+                if (result.Error is not null)
+                {
+                    errors.Add(result.Error);
+                    continue;
+                }
+
+                parameters.Add(result.Data);
+            }
+
+            if (errors.Count > 0)
+            {
+                return Result.Err(errors);
+            }
+
+            var res = _method.Invoke(_object, parameters.ToArray());
 
             if (res is Task<object?> task)
             {
@@ -31,7 +61,7 @@ internal class MethodResolver : IResolver
         }
         catch (Exception ex)
         {
-            return Result.Err(ex.ToString());
+            return Result.Err(fieldContext.Key, ex.ToString());
         }
     }
 }
