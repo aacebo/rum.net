@@ -18,24 +18,26 @@ public class ListResolver : IResolver
 
     public async Task<Result> Resolve(IContext context)
     {
-        IResolver resolver = new ObjectResolver<object>();
+        IResolver resolver = new ObjectResolver<object>(_services);
 
-        var arr = (IEnumerable<object>?)context.Parent ?? [];
-        var attribute = GetEnumerableType(arr.GetType()).GetCustomAttribute<ResolverBaseAttribute>();
-        var result = Result.Ok(arr);
-        var i = 0;
+        var enumerable = (IEnumerable<object>?)context.Parent ?? [];
+        var type = enumerable.GetType();
+        var itemType = GetEnumerableType(enumerable.GetType());
+        var listType = typeof(IList<>).MakeGenericType(itemType);
+        var attribute = itemType.GetCustomAttribute<ResolverBaseAttribute>();
+        var result = Result.Ok(enumerable);
 
         if (attribute is not null)
         {
             resolver = (IResolver)_services.GetRequiredService(attribute.Type);
         }
 
-        foreach (var item in arr)
+        for (var i = 0; i < enumerable.Count(); i++)
         {
             var res = await resolver.Resolve(new IndexContext()
             {
                 Query = context.Query,
-                Parent = item,
+                Parent = enumerable.ElementAt(i),
                 Index = i
             });
 
@@ -46,7 +48,19 @@ public class ListResolver : IResolver
                 continue;
             }
 
-            i++;
+            if (res.Data is not null)
+            {
+                if (type.IsArray)
+                {
+                    var method = type.GetMethod("SetValue", [typeof(object), typeof(int)]);
+                    method?.Invoke(enumerable, [res.Data, i]);
+                }
+                else if (type.IsAssignableTo(listType))
+                {
+                    var property = type.GetProperty("Item");
+                    property?.SetValue(enumerable, res.Data, [i]);
+                }
+            }
         }
 
         return result;
@@ -60,8 +74,8 @@ public class ListResolver : IResolver
             return type.GetGenericArguments()[0];
 
         var iface = (from i in type.GetInterfaces()
-                    where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                    select i).FirstOrDefault();
+                     where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                     select i).FirstOrDefault();
 
         if (iface == null)
             throw new ArgumentException("Does not represent an enumerable type.", nameof(type));

@@ -18,7 +18,7 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
     private readonly IServiceProvider _services;
     private readonly ListResolver _list;
 
-    public ObjectResolver(IServiceProvider? services = null)
+    public ObjectResolver(IServiceProvider services)
     {
         _services = services ?? new ServiceCollection().BuildServiceProvider();
         _list = new ListResolver(_services);
