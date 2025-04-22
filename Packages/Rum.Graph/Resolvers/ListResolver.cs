@@ -7,7 +7,7 @@ using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
-public class ListResolver : IResolver
+internal class ListResolver : IResolver
 {
     private readonly IServiceProvider _services;
 
@@ -18,7 +18,7 @@ public class ListResolver : IResolver
 
     public async Task<Result> Resolve(IContext context)
     {
-        IResolver resolver = new ObjectResolver<object>(_services);
+        IResolver resolver = new Resolver<object>(_services);
 
         var enumerable = (IEnumerable<object>?)context.Parent ?? [];
         var type = enumerable.GetType();
@@ -46,7 +46,12 @@ public class ListResolver : IResolver
             if (res.Error is not null)
             {
                 result.Error ??= new();
-                result.Error.Add(res.Error);
+                result.Error.Add(new Error()
+                {
+                    Key = i.ToString(),
+                    Errors = [res.Error]
+                });
+
                 continue;
             }
 

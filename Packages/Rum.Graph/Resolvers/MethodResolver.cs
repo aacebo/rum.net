@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Rum.Graph.Resolvers;
 
-public class MethodResolver : IResolver
+internal class MethodResolver : IResolver
 {
     private readonly object? _object;
     public readonly MethodInfo _method;

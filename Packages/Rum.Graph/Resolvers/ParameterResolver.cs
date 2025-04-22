@@ -5,14 +5,12 @@ using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
-public class ParameterResolver
+internal class ParameterResolver
 {
-    private readonly ParameterInfo _parameter;
     private readonly ContextAccessorAttribute? _accessor;
 
     public ParameterResolver(ParameterInfo parameter)
     {
-        _parameter = parameter;
         _accessor = parameter.GetCustomAttribute<ContextAccessorAttribute>();
     }
 

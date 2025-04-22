@@ -1,10 +1,9 @@
 using Rum.Graph.Annotations;
-using Rum.Graph.Resolvers;
 using Rum.Graph.Tests.Models;
 
 namespace Rum.Graph.Tests.Resolvers;
 
-public class UserResolver : ObjectResolver<User>
+public class UserResolver : Resolver<User>
 {
     public UserResolver(IServiceProvider services) : base(services)
     {

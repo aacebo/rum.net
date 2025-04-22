@@ -6,21 +6,20 @@ using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
 using Rum.Graph.Exceptions;
 using Rum.Graph.Parsing;
+using Rum.Graph.Resolvers;
 
-namespace Rum.Graph.Resolvers;
+namespace Rum.Graph;
 
-public class ObjectResolver<T> : IResolver where T : notnull, new()
+public class Resolver<T> : IResolver where T : notnull, new()
 {
-    public string Name => typeof(T).Name;
-
     private readonly MethodResolver[] _methods;
     private readonly MemberInfo[] _members;
     private readonly IServiceProvider _services;
     private readonly ListResolver _list;
 
-    public ObjectResolver(IServiceProvider services)
+    public Resolver(IServiceProvider services)
     {
-        _services = services ?? new ServiceCollection().BuildServiceProvider();
+        _services = services;
         _list = new ListResolver(_services);
         _methods = GetType()
             .GetMethods()
@@ -64,7 +63,7 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
             if (member is null)
             {
                 result.Error ??= new();
-                result.Error.Add($"field '{key}' not found");
+                result.Error.Add(key, "field not found");
                 continue;
             }
 
@@ -77,7 +76,7 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
             if (method is null)
             {
                 result.Error ??= new();
-                result.Error.Add($"field '{key}' not found");
+                result.Error.Add(key, "field not found");
                 continue;
             }
 
@@ -106,16 +105,12 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
 
                 if (attribute is not null)
                 {
-                    var resolver = (IResolver?)_services.GetService(attribute.Type);
-
-                    if (resolver is not null)
+                    var resolver = (IResolver)_services.GetRequiredService(attribute.Type);
+                    res = await resolver.Resolve(new Context()
                     {
-                        res = await resolver.Resolve(new Context()
-                        {
-                            Query = query,
-                            Parent = res.Data
-                        });
-                    }
+                        Query = query,
+                        Parent = res.Data
+                    });
                 }
             }
 
