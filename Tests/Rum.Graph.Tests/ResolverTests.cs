@@ -1,12 +1,56 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using Rum.Graph.Annotations;
+using Rum.Graph.Extensions;
 using Rum.Graph.Resolvers;
 
 namespace Rum.Graph.Tests;
 
 public class ResolverTests
 {
+    private IServiceProvider Services { get; }
+
+    public ResolverTests()
+    {
+        var services = new ServiceCollection();
+        services.AddResolver<UserResolver>();
+        services.AddResolver<AddressResolver>();
+        Services = services.BuildServiceProvider();
+    }
+
+    [Fact]
+    public async Task Should_Resolve()
+    {
+        var resolver = Services.GetRequiredService<UserResolver>();
+        var res = await resolver.Resolve("{id,name}");
+
+        Assert.False(res.IsError);
+        Assert.NotNull(res.Data);
+        Assert.IsType<User>(res.Data);
+        Assert.Null(res.GetData<User>().Followers);
+
+        res = await resolver.Resolve(@"{
+            id,
+            name,
+            followers,
+            addresses
+        }");
+
+        Assert.False(res.IsError);
+        Assert.NotNull(res.Data);
+        Assert.IsType<User>(res.Data);
+        Assert.Equal(17, res.GetData<User>().Followers);
+
+        Console.WriteLine(JsonSerializer.Serialize(res.Data, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        }));
+    }
+
     public class UserResolver : ObjectResolver<User>
     {
         [Field("followers")]
@@ -18,12 +62,25 @@ public class ResolverTests
         [Field("addresses")]
         public IList<Address> GetAddresses()
         {
-            return [];
+            return [
+                new()
+                {
+                    Street = "123 Test St",
+                    City = "New York",
+                    ZipCode = "11249",
+                    State = "New York"
+                }
+            ];
         }
     }
 
     public class AddressResolver : ObjectResolver<Address>
     {
+        [Field("country")]
+        public string? GetCountry()
+        {
+            return "USA";
+        }
     }
 
     [Resolver<UserResolver>]
@@ -55,45 +112,22 @@ public class ResolverTests
     {
         [JsonPropertyName("street")]
         [JsonPropertyOrder(0)]
-        public string? Street { get; }
+        public string? Street { get; set; }
 
         [JsonPropertyName("city")]
         [JsonPropertyOrder(1)]
-        public string? City { get; }
+        public string? City { get; set; }
 
         [JsonPropertyName("state")]
         [JsonPropertyOrder(2)]
-        public string? State { get; }
+        public string? State { get; set; }
 
         [JsonPropertyName("zipcode")]
         [JsonPropertyOrder(3)]
-        public string? ZipCode { get; }
-    }
+        public string? ZipCode { get; set; }
 
-    [Fact]
-    public async Task Should_Resolve()
-    {
-        var resolver = new UserResolver();
-        var res = await resolver.Resolve(@"{
-            id,
-            name
-        }");
-
-        Assert.False(res.IsError);
-        Assert.NotNull(res.Data);
-        Assert.IsType<User>(res.Data);
-        Assert.Null(res.GetData<User>().Followers);
-
-        res = await resolver.Resolve(@"{
-            id,
-            name,
-            followers,
-            addresses
-        }");
-
-        Assert.False(res.IsError);
-        Assert.NotNull(res.Data);
-        Assert.IsType<User>(res.Data);
-        Assert.Equal(17, res.GetData<User>().Followers);
+        [JsonPropertyName("country")]
+        [JsonPropertyOrder(4)]
+        public string? Country { get; set; }
     }
 }

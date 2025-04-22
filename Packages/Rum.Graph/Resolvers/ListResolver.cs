@@ -1,14 +1,14 @@
+using System.Reflection;
+
 using Microsoft.Extensions.DependencyInjection;
 
+using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
-using Rum.Graph.Exceptions;
 
 namespace Rum.Graph.Resolvers;
 
-public class ListResolver : IResolver<object[]>
+public class ListResolver : IResolver
 {
-    public string Name => typeof(object[]).Name;
-
     private readonly IServiceProvider _services;
 
     public ListResolver(IServiceProvider services)
@@ -16,19 +16,26 @@ public class ListResolver : IResolver<object[]>
         _services = services;
     }
 
-    public async Task<Result> Resolve(IContext<object[]> context)
+    public async Task<Result> Resolve(IContext context)
     {
-        var arr = context.Parent ?? [];
-        var type = arr.GetType().GetElementType() ?? throw new InvalidTypeException(arr.GetType());
-        var resolver = (IResolver<object>)_services.GetRequiredService(type);
-        var result = Result.Ok(arr);
+        IResolver resolver = new ObjectResolver<object>();
 
-        for (var i = 0; i < arr.Length; i++)
+        var arr = (IEnumerable<object>?)context.Parent ?? [];
+        var attribute = GetEnumerableType(arr.GetType()).GetCustomAttribute<ResolverBaseAttribute>();
+        var result = Result.Ok(arr);
+        var i = 0;
+
+        if (attribute is not null)
         {
-            var res = await resolver.Resolve(new IndexContext<object>()
+            resolver = (IResolver)_services.GetRequiredService(attribute.Type);
+        }
+
+        foreach (var item in arr)
+        {
+            var res = await resolver.Resolve(new IndexContext()
             {
                 Query = context.Query,
-                Parent = arr,
+                Parent = item,
                 Index = i
             });
 
@@ -39,9 +46,26 @@ public class ListResolver : IResolver<object[]>
                 continue;
             }
 
-            arr.SetValue(res.Data, i);
+            i++;
         }
 
         return result;
+    }
+
+    public static Type GetEnumerableType(Type type)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            return type.GetGenericArguments()[0];
+
+        var iface = (from i in type.GetInterfaces()
+                    where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                    select i).FirstOrDefault();
+
+        if (iface == null)
+            throw new ArgumentException("Does not represent an enumerable type.", nameof(type));
+
+        return GetEnumerableType(iface);
     }
 }

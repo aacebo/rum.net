@@ -2,8 +2,8 @@ using System.Reflection;
 
 namespace Rum.Graph.Contexts;
 
-public class FieldContext : Context
+public class ParamContext : Context
 {
     public required string Key { get; set; }
-    public required MemberInfo Member { get; set; }
+    public required ParameterInfo Parameter { get; set; }
 }

@@ -1,6 +1,7 @@
 using System.Reflection;
 
 using Rum.Graph.Annotations;
+using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
@@ -15,8 +16,9 @@ public class ParameterResolver
         _accessor = parameter.GetCustomAttribute<ContextAccessorAttribute>();
     }
 
-    public object? Resolve(IContext<object> context)
+    public object? Resolve(IContext context)
     {
-        return _accessor is null ? context : _accessor.Resolve(context, _parameter);
+        var param = (ParamContext)context;
+        return _accessor is null ? context : _accessor.GetValue(param);
     }
 }

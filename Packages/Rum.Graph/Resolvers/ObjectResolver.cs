@@ -9,17 +9,19 @@ using Rum.Graph.Parsing;
 
 namespace Rum.Graph.Resolvers;
 
-public class ObjectResolver<T> : IResolver<T> where T : notnull, new()
+public class ObjectResolver<T> : IResolver where T : notnull, new()
 {
     public string Name => typeof(T).Name;
 
     private readonly MethodResolver[] _methods;
     private readonly MemberInfo[] _members;
     private readonly IServiceProvider _services;
+    private readonly ListResolver _list;
 
     public ObjectResolver(IServiceProvider? services = null)
     {
         _services = services ?? new ServiceCollection().BuildServiceProvider();
+        _list = new ListResolver(_services);
         _methods = GetType()
             .GetMethods()
             .Where(method => method.GetCustomAttribute<FieldAttribute>() is not null)
@@ -35,16 +37,16 @@ public class ObjectResolver<T> : IResolver<T> where T : notnull, new()
     public async Task<Result> Resolve(string qs, T? value = default)
     {
         var query = new Parser(qs).Parse();
-        return await Resolve(new Context<T>()
+        return await Resolve(new Context()
         {
             Query = query,
             Parent = value
         });
     }
 
-    public async Task<Result> Resolve(IContext<T> context)
+    public async Task<Result> Resolve(IContext context)
     {
-        var parent = context.Parent ?? new();
+        var parent = context.Parent ?? new T();
         var result = Result.Ok(parent);
 
         foreach (var (key, query) in context.Query.Fields)
@@ -62,32 +64,45 @@ public class ObjectResolver<T> : IResolver<T> where T : notnull, new()
                 continue;
             }
 
-            var method = _methods.Where(m => m.Name == key).FirstOrDefault();
+            var method = _methods.Where(m =>
+            {
+                var name = m._method.GetCustomAttribute<FieldAttribute>()?.Name ?? m._method.Name;
+                return name == key;
+            }).FirstOrDefault();
 
             if (method is null)
             {
                 continue;
             }
 
-            var res = await method.Resolve(new FieldContext<object>()
+            var res = await method.Resolve(new FieldContext()
             {
                 Query = query,
                 Parent = parent,
-                Key = key
+                Key = key,
+                Member = member
             });
 
             if (res.IsError) continue;
-            if (res.Data is not null)
+            else if (res.Data is IEnumerable<object> list)
+            {
+                res = await _list.Resolve(new Context()
+                {
+                    Query = query,
+                    Parent = list
+                });
+            }
+            else if (res.Data is not null)
             {
                 var attribute = res.Data.GetType().GetCustomAttribute<ResolverBaseAttribute>();
 
                 if (attribute is not null)
                 {
-                    var resolver = (IResolver<object>?)_services.GetService(attribute.Type);
+                    var resolver = (IResolver?)_services.GetService(attribute.Type);
 
                     if (resolver is not null)
                     {
-                        res = await resolver.Resolve(new Context<object>()
+                        res = await resolver.Resolve(new Context()
                         {
                             Query = query,
                             Parent = parent

@@ -1,6 +1,6 @@
 namespace Rum.Graph.Contexts;
 
-public class IndexContext<T> : Context<T>
+public class IndexContext : Context
 {
     public required int Index { get; set; }
 }

@@ -1,4 +1,4 @@
-using System.Reflection;
+using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Annotations;
 
@@ -8,5 +8,5 @@ namespace Rum.Graph.Annotations;
 )]
 public abstract class ContextAccessorAttribute : Attribute
 {
-    public abstract object? Resolve(IContext<object> context, ParameterInfo parameter);
+    public abstract object? GetValue(ParamContext context);
 }

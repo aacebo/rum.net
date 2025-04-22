@@ -1,32 +1,26 @@
 using System.Reflection;
 
-using Rum.Graph.Annotations;
-
 namespace Rum.Graph.Resolvers;
 
 public class MethodResolver : IResolver
 {
-    public string Name => _attribute.Name ?? Info.Name;
-    public readonly MethodInfo Info;
-
     private readonly object? _object;
+    public readonly MethodInfo _method;
     private readonly ParameterResolver[] _parameters;
-    private readonly FieldAttribute _attribute;
 
     public MethodResolver(MethodInfo method, object? value = null)
     {
-        Info = method;
+        _method = method;
         _object = value;
         _parameters = method.GetParameters().Select(param => new ParameterResolver(param)).ToArray();
-        _attribute = method.GetCustomAttribute<FieldAttribute>() ?? throw new InvalidOperationException($"method '{method.Name}' isn't a Schema.Field");
     }
 
-    public async Task<Result> Resolve(IContext<object> context)
+    public async Task<Result> Resolve(IContext context)
     {
         try
         {
             var paramters = _parameters.Select(p => p.Resolve(context)).ToArray();
-            var res = Info.Invoke(_object, paramters);
+            var res = _method.Invoke(_object, paramters);
 
             if (res is Task<object?> task)
             {
