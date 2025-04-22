@@ -11,6 +11,18 @@ public class UserResolver : ObjectResolver<User>
 
     }
 
+    [Field("id")]
+    public Guid GetId([Parent] User user)
+    {
+        return user.Id;
+    }
+
+    [Field("name")]
+    public string? GetName([Parent] User user)
+    {
+        return user.Name;
+    }
+
     [Field("followers")]
     public int? GetFollowers()
     {

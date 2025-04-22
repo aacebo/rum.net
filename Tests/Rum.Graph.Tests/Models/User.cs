@@ -15,7 +15,7 @@ public class User
 
     [JsonPropertyName("name")]
     [JsonPropertyOrder(1)]
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; }
 
     [JsonPropertyName("followers")]
     [JsonPropertyOrder(2)]
@@ -27,7 +27,7 @@ public class User
 
     [JsonPropertyName("created_at")]
     [JsonPropertyOrder(4)]
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
     public override string ToString()
     {

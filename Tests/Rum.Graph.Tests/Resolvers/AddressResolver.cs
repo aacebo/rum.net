@@ -11,10 +11,15 @@ public class AddressResolver : ObjectResolver<Address>
 
     }
 
+    [Field("state")]
+    public string? GetState([Parent] Address address)
+    {
+        return address.State;
+    }
+
     [Field("country")]
     public string? GetCountry()
     {
-        Console.WriteLine("!!HIT!!");
         return "USA";
     }
 }

@@ -41,6 +41,8 @@ public class ListResolver : IResolver
                 Index = i
             });
 
+            result.Meta.Merge(res.Meta);
+
             if (res.Error is not null)
             {
                 result.Error ??= new();

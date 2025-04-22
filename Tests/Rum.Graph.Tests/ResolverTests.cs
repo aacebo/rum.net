@@ -1,6 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
 using Microsoft.Extensions.DependencyInjection;
 
 using Rum.Graph.Extensions;
@@ -25,7 +22,12 @@ public class ResolverTests
     public async Task Should_Resolve()
     {
         var resolver = Services.GetRequiredService<UserResolver>();
-        var res = await resolver.Resolve("{id,name}");
+        var res = await resolver.Resolve("{id}");
+
+        if (res.IsError)
+        {
+            Console.WriteLine(res.ToString());
+        }
 
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
@@ -36,18 +38,18 @@ public class ResolverTests
             id,
             name,
             followers,
-            addresses {country}
-        }");
+            addresses {state,zipcode,country}
+        }", new() { Name = "testuser" });
+
+        if (res.IsError)
+        {
+            Console.WriteLine(res.ToString());
+        }
 
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
         Assert.IsType<User>(res.Data);
         Assert.Equal(17, res.GetData<User>().Followers);
-
-        Console.WriteLine(JsonSerializer.Serialize(res.Data, new JsonSerializerOptions()
-        {
-            WriteIndented = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        }));
+        Console.WriteLine(res.ToString());
     }
 }

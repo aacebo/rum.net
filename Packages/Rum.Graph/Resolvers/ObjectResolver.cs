@@ -1,10 +1,10 @@
 using System.Reflection;
-using System.Text.Json.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
+using Rum.Graph.Exceptions;
 using Rum.Graph.Parsing;
 
 namespace Rum.Graph.Resolvers;
@@ -46,16 +46,20 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
 
     public async Task<Result> Resolve(IContext context)
     {
-        var parent = context.Parent ?? new T();
-        var result = Result.Ok(parent);
+        var value = context.Parent ?? new T();
+        var result = Result.Ok(value);
+
+        foreach (var member in _members)
+        {
+            if (!context.Query.Fields.Exists(member.GetName()))
+            {
+                member.SetValue(value, null);
+            }
+        }
 
         foreach (var (key, query) in context.Query.Fields)
         {
-            var member = _members.Where(member =>
-            {
-                var name = member.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? member.Name;
-                return name == key;
-            }).FirstOrDefault();
+            var member = _members.Where(member => member.GetName() == key).FirstOrDefault();
 
             if (member is null)
             {
@@ -72,19 +76,23 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
 
             if (method is null)
             {
+                result.Error ??= new();
+                result.Error.Add($"field '{key}' not found");
                 continue;
             }
 
             var res = await method.Resolve(new FieldContext()
             {
                 Query = query,
-                Parent = parent,
+                Parent = value,
                 Key = key,
                 Member = member
             });
 
+            result.Meta.Merge(res.Meta);
             if (res.IsError) continue;
-            else if (res.Data is IEnumerable<object> list)
+
+            if (res.Data is IEnumerable<object> list)
             {
                 res = await _list.Resolve(new Context()
                 {
@@ -105,20 +113,13 @@ public class ObjectResolver<T> : IResolver where T : notnull, new()
                         res = await resolver.Resolve(new Context()
                         {
                             Query = query,
-                            Parent = parent
+                            Parent = res.Data
                         });
                     }
                 }
             }
 
-            if (member is FieldInfo field)
-            {
-                field.SetValue(parent, res.Data);
-            }
-            else if (member is PropertyInfo property)
-            {
-                property.SetValue(parent, res.Data);
-            }
+            member.SetValue(value, res.Data);
         }
 
         return result;
