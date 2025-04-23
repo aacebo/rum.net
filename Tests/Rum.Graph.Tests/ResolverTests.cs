@@ -49,7 +49,16 @@ public class ResolverTests
         Assert.False(res.IsError);
         Assert.NotNull(res.Data);
         Assert.IsType<User>(res.Data);
-        Assert.Equal(17, res.GetData<User>().Followers);
-        Console.WriteLine(res.ToString());
+
+        var user = res.GetData<User>();
+
+        Assert.Equal(17, user.Followers);
+        Assert.Single(user.Address);
+
+        var address = user.Address.First();
+
+        Assert.Equal("New York", address.State);
+        Assert.Equal("USA", address.Country);
+        Assert.Equal("11249", address.ZipCode);
     }
 }
