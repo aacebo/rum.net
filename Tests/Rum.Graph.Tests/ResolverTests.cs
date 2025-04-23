@@ -61,4 +61,24 @@ public class ResolverTests
         Assert.Equal("USA", address.Country);
         Assert.Equal("11249", address.ZipCode);
     }
+
+    [Fact]
+    public async Task Should_ErrorWhenParamsInvalid()
+    {
+        var resolver = Services.GetRequiredService<UserResolver>();
+        var res = await resolver.Resolve(@"{
+            id,
+            name,
+            followers,
+            addresses($filter: """") {state,zipcode,country}
+        }");
+
+        if (res.IsError)
+        {
+            Console.WriteLine(res.ToString());
+        }
+
+        Assert.True(res.IsError);
+        Assert.NotNull(res.Error);
+    }
 }

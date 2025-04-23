@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 using Rum.Graph.Annotations;
 using Rum.Graph.Tests.Models;
 
@@ -29,9 +31,8 @@ public class UserResolver : Resolver<User>
     }
 
     [Field("addresses")]
-    public IList<Address> GetAddresses([Param("$filter")] string? filter)
+    public IList<Address> GetAddresses([Param("$filter"), MinLength(1)] string? filter)
     {
-        Console.WriteLine(filter);
         return [
             new()
             {

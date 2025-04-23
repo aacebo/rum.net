@@ -77,15 +77,4 @@ public class Result
             }
         };
     }
-
-    public static Result Err(params string[] message)
-    {
-        return new()
-        {
-            Error = new Error()
-            {
-                Message = string.Join("\n", message)
-            }
-        };
-    }
 }

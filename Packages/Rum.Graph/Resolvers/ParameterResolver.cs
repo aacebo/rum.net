@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 using Rum.Graph.Annotations;
@@ -38,6 +40,36 @@ internal class ParameterResolver
                 param.Parameter.Position.ToString(),
                 $"expected type \"{param.Parameter.ParameterType.Name}\", received \"{value.GetType().Name}\""
             );
+        }
+
+        var attributes = param.Parameter.GetCustomAttributes<ValidationAttribute>();
+        var results = new Collection<ValidationResult>();
+        var validContext = new ValidationContext(value)
+        {
+            DisplayName = param.Key,
+            MemberName = param.Parameter.Member.Name
+        };
+
+        if (!Validator.TryValidateValue(value, validContext, results, attributes))
+        {
+            var errors = new Error()
+            {
+                Key = _accessor is ParamAttribute p ? p.Name ?? param.Parameter.Name : param.Parameter.Name
+            };
+
+            foreach (var result in results)
+            {
+                foreach (var name in result.MemberNames)
+                {
+                    errors.Add(new Error()
+                    {
+                        Key = name,
+                        Message = result.ErrorMessage ?? result.ToString()
+                    });
+                }
+            }
+
+            return Result.Err(errors);
         }
 
         return Result.Ok(value);
