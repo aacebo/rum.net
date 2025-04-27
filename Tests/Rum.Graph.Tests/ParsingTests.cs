@@ -84,4 +84,17 @@ public class ParsingTests
         Assert.NotNull(deleted);
         Assert.Equal(true, deleted);
     }
+
+    [Fact]
+    public void Should_ParseRootQueryWithArgs()
+    {
+        var query = new Parser(@"(id: ""123""){
+			id,
+			test
+		}").Parse();
+
+        Assert.NotEmpty(query.Args);
+        Assert.Equal("123", query.Args.Get("id"));
+        Assert.Equal(2, query.Fields.Count);
+    }
 }

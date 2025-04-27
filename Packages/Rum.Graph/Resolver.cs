@@ -10,9 +10,11 @@ using Rum.Graph.Resolvers;
 
 namespace Rum.Graph;
 
-public class Resolver<T> : IResolver where T : notnull, new()
+public class Resolver<T> : IResolver where T : notnull
 {
-    private readonly MethodResolver[] _methods;
+    public string Name => typeof(T).Name;
+
+    private readonly FieldResolver[] _fields;
     private readonly MemberInfo[] _members;
     private readonly IServiceProvider _services;
     private readonly ListResolver _list;
@@ -21,10 +23,10 @@ public class Resolver<T> : IResolver where T : notnull, new()
     {
         _services = services;
         _list = new ListResolver(_services);
-        _methods = GetType()
+        _fields = GetType()
             .GetMethods()
             .Where(method => method.GetCustomAttribute<FieldAttribute>() is not null)
-            .Select(method => new MethodResolver(method, this))
+            .Select(method => new FieldResolver(method, this))
             .ToArray();
 
         _members = typeof(T)
@@ -33,28 +35,19 @@ public class Resolver<T> : IResolver where T : notnull, new()
             .ToArray();
     }
 
-    public async Task<Result> Resolve(string qs, T? value = default)
+    public async Task<Result> Resolve(T value, string qs)
     {
         var query = new Parser(qs).Parse();
         return await Resolve(new Context()
         {
             Query = query,
-            Parent = value
+            Value = value
         });
     }
 
     public async Task<Result> Resolve(IContext context)
     {
-        var value = context.Parent ?? new T();
-        var result = Result.Ok(value);
-
-        foreach (var member in _members)
-        {
-            if (!context.Query.Fields.Exists(member.GetName()))
-            {
-                member.SetValue(value, null);
-            }
-        }
+        var result = Result.Ok(context.Value);
 
         foreach (var (key, query) in context.Query.Fields)
         {
@@ -67,23 +60,17 @@ public class Resolver<T> : IResolver where T : notnull, new()
                 continue;
             }
 
-            var method = _methods.Where(m =>
-            {
-                var name = m._method.GetCustomAttribute<FieldAttribute>()?.Name ?? m._method.Name;
-                return name == key;
-            }).FirstOrDefault();
+            IResolver? field = _fields.Where(m => m.Name == key).FirstOrDefault();
 
-            if (method is null)
+            if (field is null)
             {
-                result.Error ??= new();
-                result.Error.Add(key, "field not found");
-                continue;
+                field = new StaticResolver(member.GetValue(result.Data));
             }
 
-            var res = await method.Resolve(new FieldContext()
+            var res = await field.Resolve(new FieldContext()
             {
                 Query = query,
-                Parent = value,
+                Value = context.Value,
                 Key = key,
                 Member = member
             });
@@ -107,7 +94,7 @@ public class Resolver<T> : IResolver where T : notnull, new()
                 res = await _list.Resolve(new Context()
                 {
                     Query = query,
-                    Parent = list
+                    Value = list
                 });
             }
             else if (res.Data is not null)
@@ -120,12 +107,24 @@ public class Resolver<T> : IResolver where T : notnull, new()
                     res = await resolver.Resolve(new Context()
                     {
                         Query = query,
-                        Parent = res.Data
+                        Value = res.Data
                     });
                 }
             }
 
-            member.SetValue(value, res.Data);
+            if (res.IsError && res.Error is not null)
+            {
+                result.Error ??= new();
+                result.Error.Add(new Error()
+                {
+                    Key = key,
+                    Errors = [res.Error]
+                });
+
+                continue;
+            }
+
+            member.SetValue(result.Data, res.Data);
         }
 
         return result;

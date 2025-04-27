@@ -31,6 +31,11 @@ public class Parser
     {
         var query = new Query();
 
+        if (TryConsume(TokenType.LeftParen))
+        {
+            query.Args = ParseArgs();
+        }
+
         Consume(TokenType.LeftBrace, "expected '{'");
 
         while (Current.Type != TokenType.Eof && Current.Type != TokenType.RightBrace)

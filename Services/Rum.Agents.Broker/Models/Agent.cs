@@ -37,13 +37,17 @@ public class Agent
     [Column("documentation_url")]
     public string? DocumentationUrl { get; set; }
 
-    [JsonPropertyName("created_at")]
+    [JsonPropertyName("endpoints")]
     [JsonPropertyOrder(6)]
+    public IList<Endpoint>? Endpoints { get; set; }
+
+    [JsonPropertyName("created_at")]
+    [JsonPropertyOrder(7)]
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     [JsonPropertyName("updated_at")]
-    [JsonPropertyOrder(7)]
+    [JsonPropertyOrder(8)]
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 

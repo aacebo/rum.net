@@ -6,6 +6,6 @@ public class ParentAttribute : ContextAccessorAttribute
 {
     public override object? GetValue(ParamContext context)
     {
-        return context.Parent;
+        return context.Value;
     }
 }

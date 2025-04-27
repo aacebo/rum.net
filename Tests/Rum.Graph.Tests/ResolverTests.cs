@@ -22,7 +22,7 @@ public class ResolverTests
     public async Task Should_Resolve()
     {
         var resolver = Services.GetRequiredService<UserResolver>();
-        var res = await resolver.Resolve("{id}");
+        var res = await resolver.Resolve(new(), "{id}");
 
         if (res.IsError)
         {
@@ -34,12 +34,12 @@ public class ResolverTests
         Assert.IsType<User>(res.Data);
         Assert.Null(res.GetData<User>().Followers);
 
-        res = await resolver.Resolve(@"{
+        res = await resolver.Resolve(new() { Name = "testuser" }, @"{
             id,
             name,
             followers,
             addresses($filter: ""10"") {state,zipcode,country}
-        }", new() { Name = "testuser" });
+        }");
 
         if (res.IsError)
         {
@@ -66,7 +66,7 @@ public class ResolverTests
     public async Task Should_ErrorWhenParamsInvalid()
     {
         var resolver = Services.GetRequiredService<UserResolver>();
-        var res = await resolver.Resolve(@"{
+        var res = await resolver.Resolve(new(), @"{
             id,
             name,
             followers,

@@ -9,12 +9,14 @@ namespace Rum.Graph.Resolvers;
 
 internal class ParameterResolver
 {
+    public string Name { get; }
     public ParameterInfo Parameter { get; }
 
     private readonly ContextAccessorAttribute? _accessor;
 
     public ParameterResolver(ParameterInfo parameter)
     {
+        Name = parameter.GetCustomAttribute<ParamAttribute>()?.Name ?? parameter.Name ?? parameter.Position.ToString();
         Parameter = parameter;
         _accessor = parameter.GetCustomAttribute<ContextAccessorAttribute>();
     }

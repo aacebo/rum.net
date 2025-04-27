@@ -26,4 +26,18 @@ public static class MemberInfoExtensions
             property.SetValue(obj, value);
         }
     }
+
+    public static object? GetValue(this MemberInfo member, object? obj)
+    {
+        if (member is FieldInfo field)
+        {
+            return field.GetValue(obj);
+        }
+        else if (member is PropertyInfo property)
+        {
+            return property.GetValue(obj);
+        }
+
+        return null;
+    }
 }

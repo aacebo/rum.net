@@ -1,17 +1,21 @@
 using System.Reflection;
 
+using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
-internal class MethodResolver : IResolver
+internal class FieldResolver : IResolver
 {
+    public string Name { get; }
+
     private readonly object? _object;
-    public readonly MethodInfo _method;
+    private readonly MethodInfo _method;
     private readonly ParameterResolver[] _parameters;
 
-    public MethodResolver(MethodInfo method, object? value = null)
+    public FieldResolver(MethodInfo method, object? value = null)
     {
+        Name = method.GetCustomAttribute<FieldAttribute>()?.Name ?? method.Name;
         _method = method;
         _object = value;
         _parameters = method.GetParameters().Select(param => new ParameterResolver(param)).ToArray();
@@ -31,8 +35,8 @@ internal class MethodResolver : IResolver
                 var result = param.Resolve(new ParamContext()
                 {
                     Query = fieldContext.Query,
-                    Parent = fieldContext.Parent,
-                    Key = fieldContext.Key,
+                    Value = fieldContext.Value,
+                    Key = param.Name,
                     Parameter = param.Parameter
                 });
 
@@ -61,7 +65,7 @@ internal class MethodResolver : IResolver
         }
         catch (Exception ex)
         {
-            return Result.Err(fieldContext.Key, ex.ToString());
+            return Result.Err(Name, ex.ToString());
         }
     }
 }

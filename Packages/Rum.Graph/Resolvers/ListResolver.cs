@@ -9,10 +9,13 @@ namespace Rum.Graph.Resolvers;
 
 internal class ListResolver : IResolver
 {
+    public string Name { get; }
+
     private readonly IServiceProvider _services;
 
     public ListResolver(IServiceProvider services)
     {
+        Name = "List";
         _services = services;
     }
 
@@ -20,7 +23,7 @@ internal class ListResolver : IResolver
     {
         IResolver resolver = new Resolver<object>(_services);
 
-        var enumerable = (IEnumerable<object>?)context.Parent ?? [];
+        var enumerable = (IEnumerable<object>?)context.Value ?? [];
         var type = enumerable.GetType();
         var itemType = GetEnumerableType(enumerable.GetType());
         var listType = typeof(IList<>).MakeGenericType(itemType);
@@ -37,7 +40,7 @@ internal class ListResolver : IResolver
             var res = await resolver.Resolve(new IndexContext()
             {
                 Query = context.Query,
-                Parent = enumerable.ElementAt(i),
+                Value = enumerable.ElementAt(i),
                 Index = i
             });
 
