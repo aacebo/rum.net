@@ -14,33 +14,44 @@ public class Resolver<T> : IResolver where T : notnull
 {
     public string Name => typeof(T).Name;
 
-    private readonly FieldResolver[] _fields;
-    private readonly MemberInfo[] _members;
+    private readonly Type _type;
+    private readonly IResolver[] _fields;
     private readonly IServiceProvider _services;
-    private readonly ListResolver _list;
 
     public Resolver(IServiceProvider services)
     {
         _services = services;
-        _list = new ListResolver(_services);
-        _fields = GetType()
-            .GetMethods()
-            .Where(method => method.GetCustomAttribute<FieldAttribute>() is not null)
-            .Select(method => new FieldResolver(method, this))
-            .ToArray();
-
-        _members = typeof(T)
+        _type = typeof(T);
+        _fields = _type
             .GetMembers()
             .Where(member => member is PropertyInfo || member is FieldInfo)
+            .Select<MemberInfo, IResolver>(member =>
+            {
+                var method = GetType()
+                    .GetMethods()
+                    .Where(method => method.GetCustomAttribute<FieldAttribute>()?.Name == member.GetName())
+                    .FirstOrDefault();
+
+                if (method is null)
+                {
+                    return new MemberResolver(member);
+                }
+
+                return new FieldResolver(this)
+                {
+                    Member = member,
+                    Method = method,
+                    Attribute = method.GetCustomAttribute<FieldAttribute>()!
+                };
+            })
             .ToArray();
     }
 
     public async Task<Result> Resolve(T value, string qs)
     {
-        var query = new Parser(qs).Parse();
         return await Resolve(new Context()
         {
-            Query = query,
+            Query = new Parser(qs).Parse(),
             Value = value
         });
     }
@@ -51,28 +62,19 @@ public class Resolver<T> : IResolver where T : notnull
 
         foreach (var (key, query) in context.Query.Fields)
         {
-            var member = _members.Where(member => member.GetName() == key).FirstOrDefault();
-
-            if (member is null)
-            {
-                result.Error ??= new();
-                result.Error.Add(key, "field not found");
-                continue;
-            }
-
-            IResolver? field = _fields.Where(m => m.Name == key).FirstOrDefault();
+            var field = _fields.Where(f => f.Name == key).FirstOrDefault();
 
             if (field is null)
             {
-                field = new StaticResolver(member.GetValue(result.Data));
+                result.Error ??= new();
+                result.Error.Add(key, "not found");
+                continue;
             }
 
-            var res = await field.Resolve(new FieldContext()
+            var res = await field.Resolve(new Context()
             {
                 Query = query,
-                Value = context.Value,
-                Key = key,
-                Member = member
+                Value = context.Value
             });
 
             result.Meta.Merge(res.Meta);
@@ -91,11 +93,20 @@ public class Resolver<T> : IResolver where T : notnull
 
             if (res.Data is IEnumerable<object> list)
             {
-                res = await _list.Resolve(new Context()
+                var itemType = ListResolver.GetEnumerableType(list.GetType());
+                var resolverType = itemType.GetCustomAttribute<ResolverBaseAttribute>()?.Type;
+
+                if (resolverType is not null)
                 {
-                    Query = query,
-                    Value = list
-                });
+                    var resolver = (IResolver)_services.GetRequiredService(resolverType);
+                    var listResolver = new ListResolver(resolver);
+
+                    res = await listResolver.Resolve(new Context()
+                    {
+                        Query = query,
+                        Value = list
+                    });
+                }
             }
             else if (res.Data is not null)
             {
@@ -124,7 +135,10 @@ public class Resolver<T> : IResolver where T : notnull
                 continue;
             }
 
-            member.SetValue(result.Data, res.Data);
+            if (field is FieldResolver fieldResolver)
+            {
+                fieldResolver.Member.SetValue(result.Data, res.Data);
+            }
         }
 
         return result;

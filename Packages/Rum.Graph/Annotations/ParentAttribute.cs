@@ -1,11 +1,11 @@
-using Rum.Graph.Contexts;
+using System.Reflection;
 
 namespace Rum.Graph.Annotations;
 
 public class ParentAttribute : ContextAccessorAttribute
 {
-    public override object? GetValue(ParamContext context)
+    public override Result Resolve(ParameterInfo param, IContext context)
     {
-        return context.Value;
+        return Result.Ok(context.Value);
     }
 }

@@ -1,9 +1,0 @@
-using System.Reflection;
-
-namespace Rum.Graph.Contexts;
-
-public class FieldContext : Context
-{
-    public required string Key { get; set; }
-    public required MemberInfo Member { get; set; }
-}

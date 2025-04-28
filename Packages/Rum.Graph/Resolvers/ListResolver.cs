@@ -1,47 +1,32 @@
-using System.Reflection;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Rum.Graph.Annotations;
 using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
 internal class ListResolver : IResolver
 {
-    public string Name { get; }
+    public string Name => "List";
 
-    private readonly IServiceProvider _services;
+    private readonly IResolver _resolver;
 
-    public ListResolver(IServiceProvider services)
+    public ListResolver(IResolver resolver)
     {
-        Name = "List";
-        _services = services;
+        _resolver = resolver;
     }
 
     public async Task<Result> Resolve(IContext context)
     {
-        IResolver resolver = new Resolver<object>(_services);
-
         var enumerable = (IEnumerable<object>?)context.Value ?? [];
         var type = enumerable.GetType();
-        var itemType = GetEnumerableType(enumerable.GetType());
+        var itemType = GetEnumerableType(type);
         var listType = typeof(IList<>).MakeGenericType(itemType);
-        var attribute = itemType.GetCustomAttribute<ResolverBaseAttribute>();
         var result = Result.Ok(enumerable);
-
-        if (attribute is not null)
-        {
-            resolver = (IResolver)_services.GetRequiredService(attribute.Type);
-        }
 
         for (var i = 0; i < enumerable.Count(); i++)
         {
-            var res = await resolver.Resolve(new IndexContext()
+            var res = await _resolver.Resolve(new Context()
             {
                 Query = context.Query,
-                Value = enumerable.ElementAt(i),
-                Index = i
+                Value = enumerable.ElementAt(i)
             });
 
             result.Meta.Merge(res.Meta);

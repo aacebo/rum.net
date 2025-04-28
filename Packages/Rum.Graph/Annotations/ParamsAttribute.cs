@@ -1,33 +1,24 @@
 using System.Reflection;
 
-using Rum.Graph.Contexts;
 using Rum.Graph.Exceptions;
 
 namespace Rum.Graph.Annotations;
 
 public class ParamsAttribute : ContextAccessorAttribute
 {
-    public override object? GetValue(ParamContext context)
+    public override Result Resolve(ParameterInfo param, IContext context)
     {
-        var value = Activator.CreateInstance(context.Parameter.ParameterType);
-        var members = context.Parameter.ParameterType
+        var value = Activator.CreateInstance(param.ParameterType);
+        var members = param.ParameterType
             .GetMembers()
             .Where(member => member is FieldInfo || member is PropertyInfo);
 
         foreach (var member in members)
         {
             var arg = context.Query.Args.Get(member.GetName());
-
-            if (member is FieldInfo field)
-            {
-                field.SetValue(value, arg);
-            }
-            else if (member is PropertyInfo property)
-            {
-                property.SetValue(value, arg);
-            }
+            member.SetValue(value, arg);
         }
 
-        return context.Query.Args;
+        return Result.Ok(value);
     }
 }
