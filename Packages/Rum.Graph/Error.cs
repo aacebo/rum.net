@@ -15,14 +15,15 @@ public class Error
 
     [JsonPropertyName("errors")]
     [JsonPropertyOrder(2)]
-    public IList<Error> Errors { get; set; } = [];
+    public IList<Error>? Errors { get; set; }
 
     [JsonIgnore]
-    public int Count => Errors.Count;
+    public int Count => Errors?.Count ?? 0;
 
     public Error Add(Error? error)
     {
         if (error is null) return this;
+        Errors ??= [];
         Errors.Add(error);
         return this;
     }

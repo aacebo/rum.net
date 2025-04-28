@@ -143,4 +143,16 @@ public class Resolver<T> : IResolver where T : notnull
 
         return result;
     }
+
+    public Schema ToSchema()
+    {
+        return new()
+        {
+            Type = _type.Name,
+            Fields = _fields.ToDictionary(
+                field => field.Name,
+                field => field.ToSchema()
+            )
+        };
+    }
 }

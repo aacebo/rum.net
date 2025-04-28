@@ -5,19 +5,24 @@ using Rum.Graph.Exceptions;
 
 namespace Rum.Graph.Resolvers;
 
-internal class MemberResolver : IResolver
+internal class MemberResolver(MemberInfo member) : IResolver
 {
-    public string Name => _member.GetName();
-
-    private readonly MemberInfo _member;
-
-    public MemberResolver(MemberInfo member)
-    {
-        _member = member;
-    }
+    public string Name => member.GetName();
 
     public Task<Result> Resolve(IContext context)
     {
-        return Task.FromResult(Result.Ok(_member.GetValue(context.Value)));
+        return Task.FromResult(Result.Ok(member.GetValue(context.Value)));
+    }
+
+    public Schema ToSchema()
+    {
+        return new()
+        {
+            Type = member is PropertyInfo property
+                ? property.PropertyType.Name
+                : member is FieldInfo field
+                    ? field.FieldType.Name
+                    : Name,
+        };
     }
 }

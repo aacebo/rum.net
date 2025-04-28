@@ -16,4 +16,16 @@ internal class FieldResolver(IResolver resolver) : IResolver
     {
         return Attribute.Resolve(resolver, Method, context);
     }
+
+    public Schema ToSchema()
+    {
+        return new()
+        {
+            Type = Member is PropertyInfo property
+                ? property.PropertyType.Name
+                : Member is FieldInfo field
+                    ? field.FieldType.Name
+                    : Name,
+        };
+    }
 }

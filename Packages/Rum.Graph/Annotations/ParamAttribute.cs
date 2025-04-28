@@ -40,14 +40,10 @@ public class ParamAttribute(string? name = null) : ContextAccessorAttribute
 
             foreach (var result in results)
             {
-                foreach (var memberName in result.MemberNames)
+                errors.Add(new Error()
                 {
-                    errors.Add(new Error()
-                    {
-                        Key = memberName,
-                        Message = result.ErrorMessage ?? result.ToString()
-                    });
-                }
+                    Message = result.ErrorMessage ?? result.ToString()
+                });
             }
 
             return Result.Err(errors);

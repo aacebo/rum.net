@@ -2,16 +2,9 @@ using Rum.Graph.Contexts;
 
 namespace Rum.Graph.Resolvers;
 
-internal class ListResolver : IResolver
+internal class ListResolver(IResolver resolver) : IResolver
 {
-    public string Name => "List";
-
-    private readonly IResolver _resolver;
-
-    public ListResolver(IResolver resolver)
-    {
-        _resolver = resolver;
-    }
+    public string Name => $"List[{resolver.Name}]";
 
     public async Task<Result> Resolve(IContext context)
     {
@@ -23,7 +16,7 @@ internal class ListResolver : IResolver
 
         for (var i = 0; i < enumerable.Count(); i++)
         {
-            var res = await _resolver.Resolve(new Context()
+            var res = await resolver.Resolve(new Context()
             {
                 Query = context.Query,
                 Value = enumerable.ElementAt(i)
@@ -59,6 +52,14 @@ internal class ListResolver : IResolver
         }
 
         return result;
+    }
+
+    public Schema ToSchema()
+    {
+        return new()
+        {
+            Type = Name
+        };
     }
 
     public static Type GetEnumerableType(Type type)

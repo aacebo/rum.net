@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Rum.Graph.Extensions;
@@ -80,5 +82,10 @@ public class ResolverTests
 
         Assert.True(res.IsError);
         Assert.NotNull(res.Error);
+        Console.WriteLine(JsonSerializer.Serialize((IResolver)resolver, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        }));
     }
 }
