@@ -20,6 +20,19 @@ public class Result
     [JsonIgnore]
     public bool IsError => Error != null;
 
+    public void Deconstruct(out object? data, out Error? error)
+    {
+        data = Data;
+        error = Error;
+    }
+
+    public void Deconstruct(out MetaData meta, out object? data, out Error? error)
+    {
+        meta = Meta;
+        data = Data;
+        error = Error;
+    }
+
     public T GetData<T>()
     {
         return TryGetData<T>() ?? throw new InvalidCastException();

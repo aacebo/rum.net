@@ -1,22 +1,31 @@
 using Rum.Graph.Contexts;
+using Rum.Graph.Extensions;
 
 namespace Rum.Graph.Resolvers;
 
-internal class ListResolver(IResolver resolver) : IResolver
+internal class ListResolver(IResolver resolver, IResolver indexResolver) : IResolver
 {
-    public string Name => $"List[{resolver.Name}]";
+    public string Name => resolver.Name;
+    public Type EntityType => typeof(IList<>).MakeGenericType(indexResolver.EntityType);
 
     public async Task<Result> Resolve(IContext context)
     {
-        var enumerable = (IEnumerable<object>?)context.Value ?? [];
+        var listResult = await resolver.Resolve(context);
+
+        if (listResult.IsError)
+        {
+            return listResult;
+        }
+
+        var enumerable = (IEnumerable<object>?)listResult.Data ?? [];
         var type = enumerable.GetType();
-        var itemType = GetEnumerableType(type);
+        var itemType = type.GetIndexType();
         var listType = typeof(IList<>).MakeGenericType(itemType);
         var result = Result.Ok(enumerable);
 
         for (var i = 0; i < enumerable.Count(); i++)
         {
-            var res = await resolver.Resolve(new Context()
+            var res = await indexResolver.Resolve(new Context()
             {
                 Query = context.Query,
                 Value = enumerable.ElementAt(i)
@@ -56,26 +65,6 @@ internal class ListResolver(IResolver resolver) : IResolver
 
     public Schema ToSchema()
     {
-        return new()
-        {
-            Type = Name
-        };
-    }
-
-    public static Type GetEnumerableType(Type type)
-    {
-        ArgumentNullException.ThrowIfNull(type);
-
-        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-            return type.GetGenericArguments()[0];
-
-        var iface = (from i in type.GetInterfaces()
-                     where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                     select i).FirstOrDefault();
-
-        if (iface == null)
-            throw new ArgumentException("Does not represent an enumerable type.", nameof(type));
-
-        return GetEnumerableType(iface);
+        return new($"List<{indexResolver.Name}>");
     }
 }

@@ -40,4 +40,18 @@ public static class MemberInfoExtensions
 
         return null;
     }
+
+    public static Type GetPropertyOrFieldType(this MemberInfo member)
+    {
+        if (member is PropertyInfo property)
+        {
+            return property.PropertyType;
+        }
+        else if (member is FieldInfo field)
+        {
+            return field.FieldType;
+        }
+
+        return member.GetType();
+    }
 }

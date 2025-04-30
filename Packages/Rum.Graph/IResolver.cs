@@ -8,6 +8,7 @@ namespace Rum.Graph;
 public interface IResolver
 {
     public string Name { get; }
+    public Type EntityType { get; }
 
     public Task<Result> Resolve(IContext context);
     public Schema ToSchema();
