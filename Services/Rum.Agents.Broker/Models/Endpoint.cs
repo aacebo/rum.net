@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 using SqlKata;
@@ -19,7 +20,7 @@ public class Endpoint
     [JsonPropertyName("dialect")]
     [JsonPropertyOrder(2)]
     [Column("dialect")]
-    public required Dialect Dialect { get; set; }
+    public required string Dialect { get; set; }
 
     [JsonPropertyName("created_at")]
     [JsonPropertyOrder(3)]
@@ -30,4 +31,16 @@ public class Endpoint
     [JsonPropertyOrder(4)]
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+    public class CreateRequest
+    {
+        [JsonPropertyName("path")]
+        [JsonPropertyOrder(1)]
+        public required string Path { get; set; }
+
+        [JsonPropertyName("dialect")]
+        [JsonPropertyOrder(2)]
+        [AllowedValues("a2a", "mcp")]
+        public required string Dialect { get; set; }
+    }
 }

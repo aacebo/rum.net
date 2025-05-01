@@ -19,6 +19,12 @@ public class AgentController : ControllerBase
         _resolver = resolver;
     }
 
+    [HttpGet("$schema")]
+    public IResult GetSchema()
+    {
+        return Results.Ok(_resolver.ToSchema());
+    }
+
     [HttpGet]
     public async Task<IResult> Get(CancellationToken cancellationToken = default)
     {
@@ -39,12 +45,6 @@ public class AgentController : ControllerBase
         }
 
         return Results.Ok(agent);
-    }
-
-    [HttpGet("$schema")]
-    public IResult GetSchema()
-    {
-        return Results.Ok(_resolver.ToSchema());
     }
 
     [HttpPost]

@@ -1,0 +1,7 @@
+POST http://localhost:5182/agents/007/endpoints
+content-type: application/json
+
+{
+    "path": "/mcp",
+    "dialect": "a2a"
+}
