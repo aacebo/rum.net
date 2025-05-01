@@ -8,6 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddMigrations();
 builder.AddPostgres();
 builder.AddStorage();
+builder.AddResolvers();
 
 var app = builder.Build();
 

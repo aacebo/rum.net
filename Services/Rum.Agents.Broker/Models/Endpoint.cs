@@ -11,15 +11,15 @@ public class Endpoint
     [Column("agent_id")]
     public required string AgentId { get; set; }
 
-    [JsonPropertyName("dialect")]
-    [JsonPropertyOrder(1)]
-    [Column("dialect")]
-    public required Dialect Dialect { get; set; }
-
     [JsonPropertyName("path")]
-    [JsonPropertyOrder(2)]
+    [JsonPropertyOrder(1)]
     [Column("path")]
     public required string Path { get; set; }
+
+    [JsonPropertyName("dialect")]
+    [JsonPropertyOrder(2)]
+    [Column("dialect")]
+    public required Dialect Dialect { get; set; }
 
     [JsonPropertyName("created_at")]
     [JsonPropertyOrder(3)]

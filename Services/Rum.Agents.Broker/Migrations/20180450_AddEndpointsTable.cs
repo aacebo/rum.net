@@ -9,10 +9,10 @@ public class AddEndpointsTable : Migration
     {
         Create.Table("endpoints")
             .WithColumn("agent_id").AsGuid().ForeignKey("agents", "id").NotNullable()
-            .WithColumn("dialect").AsString().NotNullable()
             .WithColumn("path").AsString().NotNullable()
-            .WithColumn("created_at").AsDateTime().NotNullable().WithDefaultValue(RawSql.Insert("CURRENT_TIMESTAMP"))
-            .WithColumn("updated_at").AsDateTime().NotNullable().WithDefaultValue(RawSql.Insert("CURRENT_TIMESTAMP"));
+            .WithColumn("dialect").AsString().NotNullable()
+            .WithColumn("created_at").AsDateTime().NotNullable()
+            .WithColumn("updated_at").AsDateTime().NotNullable();
 
         Create.PrimaryKey()
             .OnTable("endpoints")

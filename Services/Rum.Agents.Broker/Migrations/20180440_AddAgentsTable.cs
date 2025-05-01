@@ -14,8 +14,8 @@ public class AddAgentsTable : Migration
             .WithColumn("description").AsString().Nullable()
             .WithColumn("url").AsString().NotNullable()
             .WithColumn("documentation_url").AsString().Nullable()
-            .WithColumn("created_at").AsDateTime().NotNullable().WithDefaultValue(RawSql.Insert("CURRENT_TIMESTAMP"))
-            .WithColumn("updated_at").AsDateTime().NotNullable().WithDefaultValue(RawSql.Insert("CURRENT_TIMESTAMP"));
+            .WithColumn("created_at").AsDateTime().NotNullable()
+            .WithColumn("updated_at").AsDateTime().NotNullable();
     }
 
     public override void Down()

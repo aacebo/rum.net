@@ -61,11 +61,12 @@ public class Resolver<T> : IResolver where T : notnull
             .ToArray();
     }
 
-    public async Task<Result> Resolve(T value, string qs)
+    public async Task<Result> Resolve(T value, string query)
     {
+        if (query == string.Empty) return Result.Ok(value);
         return await Resolve(new Context()
         {
-            Query = new Parser(qs).Parse(),
+            Query = new Parser(query).Parse(),
             Value = value
         });
     }

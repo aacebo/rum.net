@@ -42,9 +42,10 @@ public class FieldAttribute(string name) : Attribute
 
             var res = method.Invoke(resolver, parameters.ToArray());
 
-            if (res is Task<object?> task)
+            if (res is Task task)
             {
-                res = await task;
+                await task.ConfigureAwait(false);
+                res = ((dynamic)task).Result;
             }
 
             return Result.Ok(res);

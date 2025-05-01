@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Rum.Agents.Broker.Models;
+using Rum.Agents.Broker.Resolvers;
 using Rum.Agents.Broker.Storage;
 
 namespace Rum.Agents.Broker.Controllers;
@@ -10,10 +11,12 @@ namespace Rum.Agents.Broker.Controllers;
 public class AgentController : ControllerBase
 {
     private readonly IAgentStorage _storage;
+    private readonly AgentResolver _resolver;
 
-    public AgentController(IAgentStorage storage)
+    public AgentController(IAgentStorage storage, AgentResolver resolver)
     {
         _storage = storage;
+        _resolver = resolver;
     }
 
     [HttpGet]
@@ -27,7 +30,21 @@ public class AgentController : ControllerBase
     public async Task<IResult> GetByName(string name, CancellationToken cancellationToken = default)
     {
         var agent = await _storage.GetByName(name, cancellationToken);
-        return agent == null ? Results.NotFound() : Results.Ok(agent);
+
+        if (agent is null) return Results.NotFound();
+        if (HttpContext.Request.Query.TryGetValue("q", out var query))
+        {
+            var res = await _resolver.Resolve(agent, query.ToString());
+            return Results.Json(res, statusCode: res.IsError ? 400 : 200);
+        }
+
+        return Results.Ok(agent);
+    }
+
+    [HttpGet("$schema")]
+    public IResult GetSchema()
+    {
+        return Results.Ok(_resolver.ToSchema());
     }
 
     [HttpPost]
@@ -46,7 +63,9 @@ public class AgentController : ControllerBase
             Version = request.Version,
             Description = request.Description,
             Url = request.Url,
-            DocumentationUrl = request.DocumentationUrl
+            DocumentationUrl = request.DocumentationUrl,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         }, cancellationToken);
 
         return Results.Created($"/agents/{agent.Name}", agent);

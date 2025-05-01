@@ -1,10 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
+using Rum.Graph.Annotations;
+
 using SqlKata;
 
 namespace Rum.Agents.Broker.Models;
 
+[Resolver<Resolvers.AgentResolver>]
 public class Agent
 {
     [JsonPropertyName("id")]
@@ -39,17 +42,18 @@ public class Agent
 
     [JsonPropertyName("endpoints")]
     [JsonPropertyOrder(6)]
+    [Ignore]
     public IList<Endpoint>? Endpoints { get; set; }
 
     [JsonPropertyName("created_at")]
     [JsonPropertyOrder(7)]
     [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public required DateTime CreatedAt { get; set; }
 
     [JsonPropertyName("updated_at")]
     [JsonPropertyOrder(8)]
     [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public required DateTime UpdatedAt { get; set; }
 
     public class CreateRequest
     {

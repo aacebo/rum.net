@@ -31,9 +31,9 @@ public class UserResolver : Resolver<User>
     }
 
     [Field("addresses")]
-    public IList<Address> GetAddresses([Param("$filter"), MinLength(1)] string? filter)
+    public Task<IList<Address>> GetAddresses([Param("$filter"), MinLength(1)] string? filter)
     {
-        return [
+        return Task.FromResult<IList<Address>>([
             new()
             {
                 Street = "123 Test St",
@@ -41,6 +41,6 @@ public class UserResolver : Resolver<User>
                 ZipCode = "11249",
                 State = "New York"
             }
-        ];
+        ]);
     }
 }

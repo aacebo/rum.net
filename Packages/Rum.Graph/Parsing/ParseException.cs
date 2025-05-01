@@ -31,7 +31,13 @@ public class ParseException : Exception
 
     public override string ToString()
     {
-        return JsonSerializer.Serialize(this, new JsonSerializerOptions()
+        return JsonSerializer.Serialize(new
+        {
+            line = Line,
+            start = Start,
+            end = End,
+            message = Message
+        }, new JsonSerializerOptions()
         {
             WriteIndented = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull

@@ -12,4 +12,4 @@ GET http://localhost:5182/agents
 
 ###
 
-GET http://localhost:5182/agents/007
+GET http://localhost:5182/agents/007?q={endpoints}
