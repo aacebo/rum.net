@@ -79,14 +79,25 @@ public class Result
         return new() { Error = error };
     }
 
-    public static Result Err(string key, params string[] message)
+    public static Result Err(string message)
+    {
+        return new()
+        {
+            Error = new Error()
+            {
+                Message = message
+            }
+        };
+    }
+
+    public static Result Err(string key, string message)
     {
         return new()
         {
             Error = new Error()
             {
                 Key = key,
-                Message = string.Join("\n", message)
+                Message = message
             }
         };
     }

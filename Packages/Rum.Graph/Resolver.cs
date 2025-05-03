@@ -63,7 +63,11 @@ public class Resolver<T> : IResolver where T : notnull
 
     public async Task<Result> Resolve(T value, string query)
     {
-        if (query == string.Empty) return Result.Ok(value);
+        if (query == string.Empty)
+        {
+            return Result.Ok(value);
+        }
+        
         return await Resolve(new Context()
         {
             Query = new Parser(query).Parse(),
@@ -106,23 +110,6 @@ public class Resolver<T> : IResolver where T : notnull
                 continue;
             }
 
-            // if (res.Data is IEnumerable<object> list)
-            // {
-            //     var itemType = ListResolver.GetEnumerableType(list.GetType());
-            //     var resolverType = itemType.GetCustomAttribute<ResolverBaseAttribute>()?.Type;
-
-            //     if (resolverType is not null)
-            //     {
-            //         var resolver = (IResolver)_services.GetRequiredService(resolverType);
-            //         var listResolver = new ListResolver(resolver);
-
-            //         res = await listResolver.Resolve(new Context()
-            //         {
-            //             Query = query,
-            //             Value = list
-            //         });
-            //     }
-            // }
             if (res.Data is not null)
             {
                 var attribute = res.Data.GetType().GetCustomAttribute<ResolverBaseAttribute>();

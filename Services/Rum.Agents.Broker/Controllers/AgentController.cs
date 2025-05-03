@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rum.Agents.Broker.Models;
 using Rum.Agents.Broker.Resolvers;
 using Rum.Agents.Broker.Storage;
+using Rum.Graph;
 
 namespace Rum.Agents.Broker.Controllers;
 
@@ -54,7 +55,7 @@ public class AgentController : ControllerBase
 
         if (agent != null)
         {
-            return Results.Conflict("duplicate agent name");
+            return Results.Conflict(Result.Err("duplicate agent name"));
         }
 
         agent = await _storage.Create(new()

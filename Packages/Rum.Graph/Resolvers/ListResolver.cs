@@ -6,7 +6,7 @@ namespace Rum.Graph.Resolvers;
 internal class ListResolver(IResolver resolver, IResolver indexResolver) : IResolver
 {
     public string Name => resolver.Name;
-    public Type EntityType => typeof(IList<>).MakeGenericType(indexResolver.EntityType);
+    public Type EntityType => indexResolver.EntityType;
 
     public async Task<Result> Resolve(IContext context)
     {

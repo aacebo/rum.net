@@ -9,6 +9,10 @@ builder.Services.AddMigrations();
 builder.AddPostgres();
 builder.AddStorage();
 builder.AddResolvers();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+});
 
 var app = builder.Build();
 

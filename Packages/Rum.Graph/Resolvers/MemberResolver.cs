@@ -33,6 +33,6 @@ internal class MemberResolver : IResolver
 
     public Schema ToSchema()
     {
-        return new(Member);
+        return Resolver?.ToSchema() ?? new(Member);
     }
 }

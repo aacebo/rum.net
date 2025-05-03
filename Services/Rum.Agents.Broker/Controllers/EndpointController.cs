@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using Rum.Agents.Broker.Storage;
+using Rum.Graph;
 
 namespace Rum.Agents.Broker.Controllers;
 
@@ -23,14 +24,14 @@ public class EndpointController : ControllerBase
 
         if (agent is null)
         {
-            return Results.NotFound();
+            return Results.NotFound(Result.Err("agent not found"));
         }
 
         var endpoints = await _endpoints.GetByAgentId(agent.Id, cancellationToken);
 
         if (endpoints.Any(e => e.Path == request.Path))
         {
-            return Results.Conflict("endpoint with duplicate path found");
+            return Results.Conflict(Result.Err("endpoint with duplicate path found"));
         }
 
         var endpoint = await _endpoints.Create(new()
